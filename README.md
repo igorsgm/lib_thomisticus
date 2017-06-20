@@ -111,15 +111,15 @@ $result = ThomisticusHelperNumbers::sum(array(4,3));
 
 The concept is the same than prefixes but instead of setting a prefix in your library root folder you are defining a namespace on X folder (`src` in this library). We will use composer for autoloading because it's more flexible than `JLoader`.  
 
-The global namespace defined in this library is `Thomisticus\Generic`. So a class loaded like:  
+The global namespace defined in this library is `Thomisticus`. So a class loaded like:  
 
 ```php
-use Thomisticus\Generic\Monolog\PhpfileHandler;
+use Thomisticus\Monolog\PhpfileHandler;
 ```
 
 Contains 3 parts:  
 
-* `Thomisticus\Generic` (global namespace defined)
+* `Thomisticus` (global namespace defined)
 * `Monolog` (folder)
 * `PhpfileHandler` (file)
 
@@ -130,7 +130,7 @@ The autoloading magic is done defining a PSR-4 prefix in our composer.json file 
 ```json
     "autoload": {
         "psr-4": {
-            "Thomisticus\\Generic\\": "src/"
+            "Thomisticus\\": "src/"
         }
     }
 ```
@@ -142,7 +142,7 @@ Thomisticus usage of namespaced classes:
 ```php
 JLoader::import('thomisticus.library');
 
-use Thomisticus\Generic\Helper\Dummy;
+use Thomisticus\Helper\Dummy;
 
 $dummyClass = new Dummy;
 
@@ -254,7 +254,7 @@ To provide an example of how a third party library would be used this library in
 ```php
 JLoader::import('thomisticus.library');
 
-use Thomisticus\Generic\App;
+use Thomisticus\App;
 
 $logger = App::getLog();
 
