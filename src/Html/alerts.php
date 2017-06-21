@@ -19,6 +19,18 @@ defined('_JEXEC') or die;
  */
 class Alerts
 {
+
+	/**
+	 * Returns the html of a system-message-container to be added in the desired location
+	 *
+	 * @param string $content =
+	 * @param bool   $title   = Optional title (will be highlighted)
+	 * @param string $type    = Type of alert ['info' => blue, 'warning' => yellow, 'error' => red, 'success' => green]
+	 *                        or else a custom class "alert- {class}
+	 * @param bool   $dismiss = Close alert button
+	 *
+	 * @return string
+	 */
 	public static function message($content, $title = false, $type = 'info', $dismiss = false)
 	{
 		$html = '<div id="system-message-container">
