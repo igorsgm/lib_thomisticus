@@ -9,6 +9,9 @@
 
 namespace Thomisticus\Utils;
 
+use Exception;
+use JResponseJson;
+
 defined('_JEXEC') or die;
 
 
@@ -25,5 +28,25 @@ class Ajax
 		$app = \JFactory::getApplication();
 
 		return strtolower($app->input->server->get('HTTP_X_REQUESTED_WITH', '')) == 'xmlhttprequest';
+	}
+
+
+	/**
+	 * Returns Json with array of errors that were issued by some controller task (eg save method)
+	 *
+	 * @param array $errors Array of errors returned by the controller task
+	 */
+	public static function throwComponentTaskErrors($errors)
+	{
+		$app = \JFactory::getApplication();
+
+		$return = array();
+		foreach ($errors as $error)
+		{
+			array_push($return, ($error instanceof Exception ? $error->getMessage() : $error));
+		}
+
+		echo new JResponseJson($return, 'Component task error', true);
+		$app->close();
 	}
 }

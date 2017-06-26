@@ -90,6 +90,7 @@
 		$(elementsToDisable).each(function (i, val) {
 			var element = checkParents ? $(val).closest('.control-group') : $(val);
 			element.addClass('disabled');
+			element.attr('disabled', 'true');
 		})
 	};
 
@@ -106,6 +107,7 @@
 		$(elementsToDisable).each(function (i, val) {
 			var element = checkParents ? $(val).closest('.control-group') : $(val);
 			element.removeClass('disabled');
+			element.removeAttr('disabled');
 		})
 	};
 
@@ -268,6 +270,31 @@
 	 */
 
 	/**
+	 * Previnirá o submit padrão do form e o enviará via Ajax
+	 * (Com semáforo que evita double submits)
+	 *
+	 * @param form
+	 * @param callBack
+	 */
+	tMakeAjaxOnFormSubmit = function (form, callBack) {
+
+		form = tojQuery(form);
+
+		form.submit(function (e) {
+			e.preventDefault();
+			tAjaxSubmitForm(form, callBack);
+		});
+	};
+
+	tAjaxSubmitForm = function (form, callBack) {
+		form = tojQuery(form);
+
+		$.post(form.attr('action'), form.serialize(), function (response) {
+			callBack(response);
+		});
+	};
+
+	/**
 	 * Função genérica para realizar um Ajax
 	 *
 	 * @param data = dado que será enviado
@@ -306,5 +333,15 @@
 				console.log('miss');
 			}
 		});
-	}
+	};
+
+
+	/**
+	 * GENERAL
+	 */
+
+	var tojQuery = function (data) {
+		return (data instanceof jQuery) ? data : $(data);
+	};
+
 }(window.jQuery.noConflict(), window, document));

@@ -73,4 +73,63 @@ abstract class ThomisticusHelperAsset extends JHtml
 				return false;
 		}
 	}
+
+	/**
+	 * Manage language variables inside javascrip. This function shall be called at yout view.html.php
+	 * In JavaScript use: Joomla.JText._('LANGUAGE_STRING')
+	 *
+	 * @param array $languages = strings that need to be translated and used by JavaScript files
+	 *
+	 * @return bool  True if all strings ins array has been added
+	 */
+	public static function includeLanguageVariablesToJS(array $languages)
+	{
+		if (is_array($languages))
+		{
+			foreach ($languages as $language)
+			{
+				// This will add your string to javascript object, what you can use later.
+				JText::script($language);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Parses a javascript file looking for JText keys and then loads them ready for use.
+	 *
+	 * @param   string $jsFile Path to the javascript file.
+	 *
+	 * @return bool
+	 */
+	public static function loadJSLanguageKeys($jsFile)
+	{
+		if (isset($jsFile))
+		{
+			$jsFile = JUri::root() . $jsFile;
+		}
+		else
+		{
+			return false;
+		}
+
+		if ($jsContents = file_get_contents($jsFile))
+		{
+			$languageKeys = array();
+			preg_match_all('/Joomla\.JText\._\(\'(.*?)\'\)\)?/', $jsContents, $languageKeys);
+			$languageKeys = $languageKeys[1];
+
+			foreach ($languageKeys as $lkey)
+			{
+				JText::script($lkey);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 }

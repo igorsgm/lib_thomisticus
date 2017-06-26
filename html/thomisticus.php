@@ -31,6 +31,30 @@ abstract class JHtmlThomisticus
 	 */
 	protected static $loaded = array();
 
+
+	/**
+	 * Load Thomisticus Assets.
+	 *
+	 * @return  void
+	 */
+	public static function assets()
+	{
+		if (!empty(static::$loaded[__METHOD__]))
+		{
+			return;
+		}
+
+		ThomisticusHelperAsset::load('thomisticus.js', self::EXTENSION);
+		ThomisticusHelperAsset::load('thomisticus.css', self::EXTENSION);
+
+//		For when languages are added in thomisticus.js
+//		ThomisticusHelperAsset::loadJSLanguageKeys(DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . self::EXTENSION
+//			. DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . self::EXTENSION . '.js');
+
+		static::$loaded[__METHOD__] = true;
+	}
+
+
 	/**
 	 * Load fontawesome 4.
 	 *
@@ -85,6 +109,11 @@ abstract class JHtmlThomisticus
 		static::$loaded[__METHOD__] = true;
 	}
 
+	/**
+	 * Load jQuery Mask
+	 *
+	 * @return void
+	 */
 	public static function mask()
 	{
 		if (!empty(static::$loaded[__METHOD__]))
@@ -97,4 +126,21 @@ abstract class JHtmlThomisticus
 		static::$loaded[__METHOD__] = true;
 	}
 
+	/**
+	 * Load SweetAlert2
+	 *
+	 * @return void
+	 */
+	public static function sweetAlert2()
+	{
+		if (!empty(static::$loaded[__METHOD__]))
+		{
+			return;
+		}
+
+		ThomisticusHelperAsset::load('vendor/sweetalert2/sweetalert2.min.js', self::EXTENSION);
+		ThomisticusHelperAsset::load('vendor/sweetalert2/sweetalert2.min.css', self::EXTENSION);
+
+		static::$loaded[__METHOD__] = true;
+	}
 }
