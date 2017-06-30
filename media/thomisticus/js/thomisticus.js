@@ -3,18 +3,6 @@
 	base_url = new RegExp(/^.*\//).exec(window.location.href)[0].replace('/administrator', '');
 
 	/**
-	 * Retorna a data atual no formato SQL yyyy-mm-dd H:i:s
-	 * @returns {string}
-	 */
-	tCurrentDate = function () {
-		var dateTime = new Date();
-		var date     = dateTime.getFullYear() + '-' + ("0" + (dateTime.getMonth() + 1)).slice(-2) + '-' + dateTime.getDate();
-		var time     = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
-
-		return date + ' ' + time;
-	};
-
-	/**
 	 * Retorna um parâmetro da URL
 	 *
 	 * @param param = o parâmetro da query string
@@ -254,6 +242,26 @@
 		}
 	};
 
+	/**
+	 * DATE
+	 */
+
+	tFormatDate = function (date) {
+		date = new Date(date.split("/").reverse().join("-"));
+		return (("0" + (date.getDate() + 1)).slice(-2) + "/" + ("0" + (date.getMonth() + 1)).slice(-2) + "/" + date.getFullYear());
+	};
+
+	/**
+	 * Retorna a data atual no formato SQL yyyy-mm-dd H:i:s
+	 * @returns {string}
+	 */
+	tCurrentDate = function () {
+		var dateTime = new Date();
+		var date     = dateTime.getFullYear() + '-' + ("0" + (dateTime.getMonth() + 1)).slice(-2) + '-' + dateTime.getDate();
+		var time     = dateTime.getHours() + ":" + dateTime.getMinutes() + ":" + dateTime.getSeconds();
+
+		return date + ' ' + time;
+	};
 
 	/**
 	 * STRINGS
@@ -265,6 +273,7 @@
 		});
 	};
 
+
 	/**
 	 * AJAX
 	 */
@@ -274,67 +283,53 @@
 	 * (Com semáforo que evita double submits)
 	 *
 	 * @param form
-	 * @param callBack
+	 * @param successCallBack
 	 */
-	tMakeAjaxOnFormSubmit = function (form, callBack) {
+	tMakeAjaxOnFormSubmit = function (form, successCallBack) {
 
 		form = tojQuery(form);
 
 		form.submit(function (e) {
 			e.preventDefault();
-			tAjaxSubmitForm(form, callBack);
-		});
-	};
 
-	tAjaxSubmitForm = function (form, callBack) {
-		form = tojQuery(form);
-
-		$.post(form.attr('action'), form.serialize(), function (response) {
-			callBack(response);
+			tAjax(form.attr('action'), 'POST', form.serialize(), 'html', function (response) {
+				successCallBack(response);
+			});
 		});
 	};
 
 	/**
 	 * Função genérica para realizar um Ajax
 	 *
-	 * @param data = dado que será enviado
-	 * @param url = url que será chamada
-	 * @param method = tipo da requisição
-	 * @param dataType = tipo de transmissão
-	 * @param callBack = função callback que será chamada
+	 * @param url
+	 * @param type
+	 * @param data
+	 * @param dataType
+	 * @param successCallBack
+	 * @param errorCallBack
 	 */
-	tMakeAjax = function (data, url, method, dataType, callBack) {
+	tAjax = function (url, type, data, dataType, successCallBack, errorCallBack) {
+
+		successCallBack = successCallBack || false;
+		errorCallBack   = errorCallBack || false;
+
 		$.ajax({
 			url:      url,
-			type:     method,
+			type:     type,
 			data:     data,
 			dataType: dataType,
 			success:  function (data) {
-				callBack(data);
+				if (typeof successCallBack === 'function') {
+					successCallBack(data);
+				}
 			},
-			error:    function () {
-				console.log('miss');
+			error:    function (data) {
+				if (typeof errorCallBack === 'function') {
+					errorCallBack(data);
+				}
 			}
 		});
 	};
-
-	tMakeAjaxPlusElement = function (data, url, callBack, element, method) {
-		/* Configura a requisição AJAX */
-		jQuery.noConflict().ajax({
-			/* URL que será chamada */
-			url:      base_url + url,
-			type:     method, /* Tipo da requisição */
-			data:     data, /* dado que será enviado via POST */
-			dataType: 'json', /* Tipo de transmissão */
-			success:  function (data) {
-				callBack(data, element);
-			},
-			error:    function () {
-				console.log('miss');
-			}
-		});
-	};
-
 
 	/**
 	 * GENERAL

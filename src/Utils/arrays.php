@@ -9,8 +9,10 @@
 
 namespace Thomisticus\Utils;
 
+defined('_JEXEC') or die;
 
-class ArrayHelper
+
+class Arrays
 {
 	/**
 	 * Remove multiple elements in an array

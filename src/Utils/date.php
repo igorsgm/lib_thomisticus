@@ -9,6 +9,7 @@
 
 namespace Thomisticus\Utils;
 
+use DateTime;
 use JFactory;
 
 defined('_JEXEC') or die;

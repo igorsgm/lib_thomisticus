@@ -36,7 +36,7 @@ class Ajax
 	 *
 	 * @param array $errors Array of errors returned by the controller task
 	 */
-	public static function throwComponentTaskErrors($errors)
+	public static function throwControllerValidationErrors($errors)
 	{
 		$app = \JFactory::getApplication();
 
