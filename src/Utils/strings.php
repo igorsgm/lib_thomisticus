@@ -43,4 +43,16 @@ class Strings
 
 		return \JText::_($languageString);
 	}
+
+	/**
+	 * Returns a formatted string in the Brazilian currency
+	 *
+	 * @param string|integer $number
+	 *
+	 * @return string
+	 */
+	public static function toReais($number)
+	{
+		return 'R$ ' . number_format($number, 2, ',', '.');
+	}
 }
