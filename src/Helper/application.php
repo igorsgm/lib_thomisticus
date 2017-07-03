@@ -9,14 +9,16 @@
 
 namespace Thomisticus\Helper;
 
+use JFactory;
+use JParameter;
+
 defined('_JEXEC') or die;
 
 /**
- * Just a dummy class
+ * Application helper class
  *
- * @since  __DEPLOY_VERSION__
  */
-class Dummy
+class Application
 {
 	/**
 	 * Thomisticus dummy method

@@ -45,6 +45,41 @@ class Strings
 	}
 
 	/**
+	 * Returns a masked string. Useful for formatting cpfs, cnpj, ceps, dates*
+	 *
+	 * @param string $val  value to be masked, eg: 12345678910
+	 * @param string $mask mask format, eg: '000.000.000-00'
+	 *
+	 *
+	 * @return string
+	 */
+	public static function mask($val, $mask)
+	{
+		$masked = '';
+		$k      = 0;
+
+		for ($i = 0; $i <= strlen($mask) - 1; $i++)
+		{
+			if ($mask[$i] == '0')
+			{
+				if (isset($val[$k]))
+				{
+					$masked .= $val[$k++];
+				}
+			}
+			else
+			{
+				if (isset($mask[$i]))
+				{
+					$masked .= $mask[$i];
+				}
+			}
+		}
+
+		return $masked;
+	}
+
+	/**
 	 * Returns a formatted string in the Brazilian currency
 	 *
 	 * @param string|integer $number

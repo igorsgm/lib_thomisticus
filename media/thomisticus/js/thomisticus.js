@@ -266,11 +266,55 @@
 	/**
 	 * STRINGS
 	 */
+
+	/**
+	 * Replace elements in a string.
+	 *
+	 * Eg: var myString = "{0} is my name, {1} is my age"
+	 * myString.format("Thomas", "35"); // Returns "Thomas is my name, 35 is my age."
+	 *
+	 * @returns {string}
+	 */
 	String.prototype.format = function () {
 		var args = arguments;
 		return this.replace(/{(\d+)}/g, function (match, number) {
 			return !tEmpty(args[number]) ? args[number] : '';
 		});
+	};
+
+	/**
+	 * Returns a masked string. Useful for formatting cpfs, cnpj, ceps, dates*
+	 *
+	 * @param {string} mask  format, eg: '000.000.000-00'
+	 *
+	 * @returns {string}
+	 */
+	String.prototype.mask = function (mask) {
+		var masked = '';
+		var k      = 0;
+
+		for (i = 0; i <= mask.length - 1; i++) {
+			if (mask[i] === '0') {
+				if ((this[k]).length) {
+					masked += this[k++];
+				}
+			}
+			else {
+				if ((mask[i]).length) {
+					masked += mask[i];
+				}
+			}
+		}
+
+		return masked;
+	};
+
+	/**
+	 * Sanitize a string to return only numbers
+	 * @returns {string}
+	 */
+	String.prototype.onlyNumbers = function () {
+		return this.replace(/[^0-9]/g, '');
 	};
 
 
@@ -285,12 +329,13 @@
 	 * @param form
 	 * @param successCallBack
 	 */
-	tMakeAjaxOnFormSubmit = function (form, successCallBack) {
+	tAjaxOnFormSubmit = function (form, successCallBack) {
 
 		form = tojQuery(form);
 
 		form.submit(function (e) {
 			e.preventDefault();
+			e.stopImmediatePropagation();
 
 			tAjax(form.attr('action'), 'POST', form.serialize(), 'html', function (response) {
 				successCallBack(response);

@@ -26,4 +26,29 @@ class Arrays
 	{
 		return array_diff_key($array, array_flip($elementsToRemove));
 	}
+
+	/**
+	 * Check if an array contains all elements from another array
+	 *
+	 * @param array $array            array that supposedly contains all elements
+	 * @param bool  $arrayOnlyKeys    true to consider only array_keys
+	 * @param array $subArray         array to be searched
+	 * @param bool  $subArrayOnlyKeys true to consider only array_keys
+	 *
+	 * @return bool true if all elements|keys of $subArray are an element|key of $array
+	 */
+	public static function insideAnother($array, $arrayOnlyKeys = false, $subArray, $subArrayOnlyKeys = false)
+	{
+		if ($arrayOnlyKeys)
+		{
+			$array = array_keys($array);
+		}
+
+		if ($subArrayOnlyKeys)
+		{
+			$subArray = array_keys($subArray);
+		}
+
+		return count(array_intersect($subArray, $array)) == count($subArray);
+	}
 }

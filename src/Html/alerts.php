@@ -11,7 +11,6 @@ namespace Thomisticus\Html;
 
 defined('_JEXEC') or die;
 
-
 /**
  * Alert Class
  *
@@ -31,9 +30,9 @@ class Alerts
 	 *
 	 * @return string
 	 */
-	public static function message($content, $title = false, $type = 'info', $dismiss = false)
+	public static function message($content, $title = false, $type = 'info', $dismiss = false, $customClass = null)
 	{
-		$html = '<div id="system-message-container">
+		$html = '<div id="system-message-container" class="' . $customClass . '">
 					<div id="system-message">
 					<div class="no-margin alert alert-' . $type . '">';
 
