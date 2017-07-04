@@ -9,6 +9,7 @@
 
 namespace Thomisticus\Utils;
 
+use DateTime;
 use JFactory;
 
 defined('_JEXEC') or die;
@@ -39,6 +40,8 @@ class Date
 	 */
 	public static function formatDate($date, $format)
 	{
+		$date = str_replace('/', '-', $date);
+
 		return date($format, strtotime($date));
 	}
 }
