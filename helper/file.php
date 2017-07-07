@@ -89,7 +89,7 @@ abstract class ThomisticusHelperFile
 	}
 
 	/**
-	 * Replace any special characters in the filename
+	 * Replace any special characters in the filename and create unique name
 	 *
 	 * @param array $file File that will have the name treated
 	 *
@@ -97,10 +97,11 @@ abstract class ThomisticusHelperFile
 	 */
 	public static function treatFileName($file)
 	{
-		$fileName  = JFile::stripExt($file['name']);
+		$fileName  = \Thomisticus\Utils\Date::currentDateTime() . '-' . JFile::stripExt($file['name']);
+		$fileName  = preg_replace("/[^A-Za-z0-9]/i", "-", $fileName);
 		$extension = JFile::getExt($file['name']);
 
-		return preg_replace("/[^A-Za-z0-9]/i", "-", $fileName) . '.' . $extension;
+		return $fileName . '.' . $extension;
 	}
 
 	/**
