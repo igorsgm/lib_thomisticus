@@ -9,8 +9,6 @@
 
 namespace Thomisticus\Helper;
 
-use JParameter;
-
 defined('_JEXEC') or die;
 
 /**

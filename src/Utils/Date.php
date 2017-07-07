@@ -41,7 +41,6 @@ class Date
 	public static function formatDate($date, $format)
 	{
 		$date = str_replace('/', '-', $date);
-
 		return date($format, strtotime($date));
 	}
 }

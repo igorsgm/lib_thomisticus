@@ -317,6 +317,64 @@
 		return this.replace(/[^0-9]/g, '');
 	};
 
+	/**
+	 * NUMBERS
+	 */
+
+	/**
+	 * Convert computer format to bytes
+	 *
+	 * @param {string} from The value to convert to bytes, with metric prefix - according IS (eg: 2M, 1G)
+	 *
+	 * @read https://en.wikipedia.org/wiki/Metric_prefix
+	 * @return bool|string
+	 */
+	convertToBytes = function (from) {
+		var number = substr(from, 0, -1);
+		var unit   = strtoupper(substr(from, -1));
+
+		var expByUnit = {K: 1, M: 2, G: 3, T: 4, P: 5, E: 6, Z: 7, Y: 8};
+
+		if (!isset(expByUnit[unit])) {
+			return false;
+		}
+
+		return number * pow(1024, expByUnit[unit]);
+	};
+
+
+	/**
+	 * IMAGES
+	 */
+
+	/**
+	 * Preview an image before it is uploaded (should be called in a "change" input event)
+	 *
+	 * @param input Input Element to upload images
+	 * @param {string} imgAttr  Attribute to identify the img element (where image will be previewed)
+	 * @param {string} maxFileSize  Maximum file size (eg: '500K', '2M')
+	 * @param {function} callBackMaxFileSize  Callback function if file exceeds maxFileSize in bytes
+	 */
+	readUrlImageAndPreview = function (input, imgAttr, maxFileSize, callBackMaxFileSize) {
+		maxFileSize         = convertToBytes(maxFileSize) || false;
+		callBackMaxFileSize = callBackMaxFileSize || false;
+
+
+		if (input.files && input.files[0]) {
+			var file = input.files[0];
+
+			if (file.size > maxFileSize && typeof callBackMaxFileSize === 'function') {
+				callBackMaxFileSize(input);
+			} else {
+				var reader    = new FileReader();
+				reader.onload = function (e) {
+					$(imgAttr).attr('src', e.target.result);
+				};
+
+				reader.readAsDataURL(file);
+			}
+		}
+	};
 
 	/**
 	 * AJAX
@@ -337,9 +395,7 @@
 			e.preventDefault();
 			e.stopImmediatePropagation();
 
-			tAjax(form.attr('action'), 'POST', form.serialize(), 'html', function (response) {
-				successCallBack(response);
-			});
+			tAjax(form.attr('action'), 'POST', new FormData(this), 'json', successCallBack);
 		});
 	};
 
@@ -358,7 +414,7 @@
 		successCallBack = successCallBack || false;
 		errorCallBack   = errorCallBack || false;
 
-		$.ajax({
+		var ajaxObj = {
 			url:      url,
 			type:     type,
 			data:     data,
@@ -373,7 +429,14 @@
 					errorCallBack(data);
 				}
 			}
-		});
+		};
+
+		if (data instanceof FormData) {
+			ajaxObj.contentType = false;
+			ajaxObj.processData = false;
+		}
+
+		$.ajax(ajaxObj);
 	};
 
 	/**

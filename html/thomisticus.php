@@ -44,6 +44,7 @@ abstract class JHtmlThomisticus
 			return;
 		}
 
+		ThomisticusHelperAsset::load('vendor/phpJs/phpJs.min.js', self::EXTENSION);
 		ThomisticusHelperAsset::load('thomisticus.js', self::EXTENSION);
 		ThomisticusHelperAsset::load('thomisticus.css', self::EXTENSION);
 
@@ -122,6 +123,24 @@ abstract class JHtmlThomisticus
 		}
 
 		ThomisticusHelperAsset::load('vendor/mask/jquery.mask.min.js', self::EXTENSION);
+
+		static::$loaded[__METHOD__] = true;
+	}
+
+
+	/**
+	 * Load jQuery Mask
+	 *
+	 * @return void
+	 */
+	public static function phpJs()
+	{
+		if (!empty(static::$loaded[__METHOD__]))
+		{
+			return;
+		}
+
+		ThomisticusHelperAsset::load('vendor/phpJs/phpJs.min.js', self::EXTENSION);
 
 		static::$loaded[__METHOD__] = true;
 	}

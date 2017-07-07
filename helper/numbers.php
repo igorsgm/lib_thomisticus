@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Thomisticus class with dummy functions
+ * Thomisticus class with number functions
  *
  * @package     Thomisticus.Library
  * @subpackage  Helper

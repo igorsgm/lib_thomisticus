@@ -51,4 +51,47 @@ class Arrays
 
 		return count(array_intersect($subArray, $array)) == count($subArray);
 	}
+
+	/**
+	 * Checks if multiple keys exist in an array
+	 *
+	 * @param array        $array
+	 * @param array|string $keys
+	 *
+	 * @read https://wpscholar.com/blog/check-multiple-array-keys-exist-php/
+	 * @return bool
+	 */
+	public static function arrayKeysExist($array, $keys)
+	{
+		$count = 0;
+		if (!is_array($keys))
+		{
+			$keys = func_get_args();
+			array_shift($keys);
+		}
+		foreach ($keys as $key)
+		{
+			if (array_key_exists($key, $array))
+			{
+				$count++;
+			}
+		}
+
+		return count($keys) === $count;
+	}
+
+	/**
+	 * Checks if an array is multidimensional or not
+	 *
+	 * @param array $array
+	 *
+	 * @read https://pageconfig.com/post/checking-multidimensional-arrays-in-php
+	 * @return bool
+	 */
+	public static function isMultiDimensional($array)
+	{
+		rsort($array);
+
+		return isset($array[0]) && is_array($array[0]);
+	}
 }
