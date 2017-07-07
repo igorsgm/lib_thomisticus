@@ -53,6 +53,18 @@ class Arrays
 	}
 
 	/**
+	 * Returns the first element in an array.
+	 *
+	 * @param  array $array
+	 *
+	 * @return mixed
+	 */
+	public static function first($array)
+	{
+		return array_pop(array_reverse($array));
+	}
+
+	/**
 	 * Checks if multiple keys exist in an array
 	 *
 	 * @param array        $array
