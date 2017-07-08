@@ -98,7 +98,7 @@ abstract class ThomisticusHelperFile
 	public static function treatFileName($file)
 	{
 		$fileName  = \Thomisticus\Utils\Date::currentDateTime() . '-' . JFile::stripExt($file['name']);
-		$fileName  = preg_replace("/[^A-Za-z0-9]/i", "-", $fileName);
+		$fileName = preg_replace("/[^A-Za-z0-9]/i", "-", $fileName);
 		$extension = JFile::getExt($file['name']);
 
 		return $fileName . '.' . $extension;

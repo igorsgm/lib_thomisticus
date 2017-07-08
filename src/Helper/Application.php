@@ -9,6 +9,9 @@
 
 namespace Thomisticus\Helper;
 
+use JFactory;
+use JParameter;
+
 defined('_JEXEC') or die;
 
 /**
@@ -17,17 +20,5 @@ defined('_JEXEC') or die;
  */
 class Application
 {
-	/**
-	 * Thomisticus dummy method
-	 *
-	 * @param   mixed $bar Variable to output
-	 *
-	 * @return  void
-	 */
-	public function foo($bar)
-	{
-		echo '<pre>';
-		var_dump($bar);
-		echo '</pre>';
-	}
+
 }

@@ -56,4 +56,27 @@ class Numbers
 
 		return $number * pow(1024, $expByUnit[$unit]);
 	}
+
+
+	/**
+	 * Retreves the sum of an array of strings of BRL currency
+	 *
+	 * @param array $values         array of reais string to be summed
+	 * @param bool  $returnAsReais  true to return as a formatted string in the Brazilian currency
+	 *
+	 * @return float|int|string
+	 */
+	public static function sumReais(array $values, $returnAsReais = false)
+	{
+		$total = 0;
+		foreach ($values as $value) {
+			// remove everything except a digit "0-9", a comma ",", and a dot "."
+			$value = preg_replace('/[^\d,\.]/', '', $value);
+
+			$value = str_replace('.', '', $value);
+			$total += (float) str_replace(',', '.', $value);
+		}
+
+		return !$returnAsReais ? $total : Strings::toReais($total);
+	}
 }
