@@ -17,17 +17,16 @@ defined('_JEXEC') or die;
 
 class Date
 {
-
 	/**
-	 * Retrieves current datetime according Joomla Global Settings
+	 * Retrieves formatted datetime according Joomla Global Settings
+	 *
+	 * @param $time
 	 *
 	 * @return string
-	 *
-	 * @since version
 	 */
-	public static function currentDateTime()
+	public static function getDate($time = 'now')
 	{
-		return JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+		return JFactory::getDate($time, JFactory::getConfig()->get('offset'))->toSql(true);
 	}
 
 	/**

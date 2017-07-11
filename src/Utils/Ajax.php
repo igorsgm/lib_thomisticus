@@ -30,9 +30,20 @@ class Ajax
 		return strtolower($app->input->server->get('HTTP_X_REQUESTED_WITH', '')) == 'xmlhttprequest';
 	}
 
+	/**
+	 * Retrieves Json in case of Error 500 made by model while validating $data according to the form or any other case
+	 *
+	 * @param \JModelLegacy $model
+	 */
+	public static function throwModelFormValidationErrors($model)
+	{
+		$app = \JFactory::getApplication();
+		echo new JResponseJson($model->getError(), 500, true);
+		$app->close();
+	}
 
 	/**
-	 * Returns Json with array of errors that were issued by some controller task (eg save method)
+	 * Retrieves Json with array of errors that were issued by some controller task (eg save method)
 	 *
 	 * @param array $errors Array of errors returned by the controller task
 	 */

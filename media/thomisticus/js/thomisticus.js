@@ -318,6 +318,38 @@
 	};
 
 	/**
+	 * Returns a formatted string in the Brazilian currency
+	 * @returns {string}
+	 */
+	String.prototype.toReais = function () {
+		return 'R$ ' + number_format(this, 2, ',', '.');
+	};
+
+	/**
+	 * MASKS
+	 */
+
+
+	/**
+	 * Telephone mask with optional ninth digit
+	 *
+	 * Usage eg: $('#id').mask(tel9DigitMaskBehavior, telOptional9Digit);
+	 * @param val
+	 * @returns {string}
+	 */
+	tel9DigitMaskBehavior = function (val) {
+		return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+	};
+	telOptional9Digit = function () {
+		return {
+			onKeyPress: function (val, e, field, options) {
+				field.mask(tel9DigitMaskBehavior.apply({}, arguments), options);
+			}
+		};
+	};
+
+
+	/**
 	 * NUMBERS
 	 */
 
@@ -385,7 +417,7 @@
 	 * (Com semáforo que evita double submits)
 	 *
 	 * @param form
-	 * @param successCallBack
+	 * @param {function}    successCallBack
 	 */
 	tAjaxOnFormSubmit = function (form, successCallBack) {
 
@@ -395,7 +427,11 @@
 			e.preventDefault();
 			e.stopImmediatePropagation();
 
-			tAjax(form.attr('action'), 'POST', new FormData(this), 'json', successCallBack);
+			if (typeof lazyLoading === "function") {
+				lazyLoading();
+			}
+
+			tAjax(form.attr('action'), new FormData(this), 'POST', 'json', successCallBack);
 		});
 	};
 
@@ -403,16 +439,18 @@
 	 * Função genérica para realizar um Ajax
 	 *
 	 * @param url
-	 * @param type
 	 * @param data
+	 * @param type
 	 * @param dataType
 	 * @param successCallBack
 	 * @param errorCallBack
 	 */
-	tAjax = function (url, type, data, dataType, successCallBack, errorCallBack) {
+	tAjax = function (url, data, type, dataType, successCallBack, errorCallBack) {
 
 		successCallBack = successCallBack || false;
 		errorCallBack   = errorCallBack || false;
+		type            = type || 'POST';
+		dataType        = dataType || 'json';
 
 		var ajaxObj = {
 			url:      url,
@@ -443,7 +481,7 @@
 	 * GENERAL
 	 */
 
-	var tojQuery = function (data) {
+	tojQuery = function (data) {
 		return (data instanceof jQuery) ? data : $(data);
 	};
 
