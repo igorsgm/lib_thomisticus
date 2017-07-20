@@ -44,6 +44,7 @@ abstract class JHtmlThomisticus
 			return;
 		}
 
+		ThomisticusHelperAsset::loadJSUriSupport();
 		ThomisticusHelperAsset::load('vendor/phpJs/phpJs.min.js', self::EXTENSION);
 		ThomisticusHelperAsset::load('thomisticus.js', self::EXTENSION);
 		ThomisticusHelperAsset::load('thomisticus.css', self::EXTENSION);

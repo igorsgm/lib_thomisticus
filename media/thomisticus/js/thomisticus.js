@@ -1,5 +1,9 @@
 (function ($) {
 
+	$(document).ready(function () {
+		$('select').chosen().chosenReadonly();
+	});
+
 	base_url = new RegExp(/^.*\//).exec(window.location.href)[0].replace('/administrator', '');
 
 	/**
@@ -69,16 +73,21 @@
 	 * Adicionar a classe disabled aos campos informados no array
 	 *
 	 * @param elementsToDisable = array de elementos que serão desabilitados
-	 * @param checkParents      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param checkControlGroup      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
 	 */
-	tDisableFields = function (elementsToDisable, checkParents) {
+	tDisableFields = function (elementsToDisable, checkControlGroup) {
 		// False por padrão, caso o parâmetro não tenha sido enviado
-		checkParents = checkParents || false;
+		checkControlGroup = checkControlGroup || false;
 
 		$(elementsToDisable).each(function (i, val) {
-			var element = checkParents ? $(val).closest('.control-group') : $(val);
+			var element = checkControlGroup ? $(val).closest('.control-group') : $(val);
 			element.addClass('disabled');
 			element.attr('disabled', 'true');
+
+			// Se é um select do tipo Chosen
+			if (element.prop("tagName") === 'SELECT' && !tEmpty($(val).data('chosen'))) {
+				element.chosen().chosenReadonly(true);
+			}
 		})
 	};
 
@@ -86,16 +95,21 @@
 	 * Remover a classe disabled aos campos informados no array
 	 *
 	 * @param elementsToDisable = array de elementos que serão desabilitados
-	 * @param checkParents      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param checkControlGroup      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
 	 */
-	tEnableFields = function (elementsToDisable, checkParents) {
+	tEnableFields = function (elementsToDisable, checkControlGroup) {
 		// False por padrão, caso o parâmetro não tenha sido enviado
-		checkParents = checkParents || false;
+		checkControlGroup = checkControlGroup || false;
 
 		$(elementsToDisable).each(function (i, val) {
-			var element = checkParents ? $(val).closest('.control-group') : $(val);
+			var element = checkControlGroup ? $(val).closest('.control-group') : $(val);
 			element.removeClass('disabled');
 			element.removeAttr('disabled');
+
+			// Se é um select do tipo Chosen
+			if (element.prop("tagName") === 'SELECT' && !tEmpty($(val).data('chosen'))) {
+				element.chosen().chosenReadonly(false);
+			}
 		})
 	};
 
@@ -195,6 +209,45 @@
 	 * SELECTS
 	 */
 
+
+	/*
+	 * Readonly support for Chosen selects
+	 * @version v1.0.6
+	 * @link http://github.com/westonganger/chosen-readonly
+	 */
+	$.fn.chosenReadonly = function (isReadonly) {
+		var elements = this.filter(function (i, item) {
+			return $(item).data('chosen');
+		});
+
+		elements.on('chosen:updated', function () {
+			var item = $(this);
+			if (item.attr('readonly')) {
+				var wasDisabled = item.is(':disabled');
+
+				item.attr('disabled', 'disabled');
+				item.data('chosen').search_field_disabled();
+
+				if (wasDisabled) {
+					item.attr('disabled', 'disabled');
+				} else {
+					item.removeAttr('disabled');
+				}
+			} else {
+				item.data('chosen').search_field_disabled();
+			}
+		});
+
+		if (isReadonly) {
+			elements.attr('readonly', 'readonly');
+		} else if (isReadonly === false) {
+			elements.removeAttr('readonly');
+		}
+
+		elements.trigger('chosen:updated');
+
+		return this;
+	};
 
 	/**
 	 * Selecionar um ou mais valores em um Multiple select

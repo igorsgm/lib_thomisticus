@@ -7,8 +7,6 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-use Thomisticus\Utils\Arrays;
-
 defined('_JEXEC') or die;
 
 /**
@@ -47,5 +45,39 @@ abstract class ThomisticusHelperComponent
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get an instance of the named model
+	 *
+	 * @param string $modelSufix    Model sufix name. Eg: 'Article'
+	 * @param string $componentName The component name which model belongs to. Eg: 'com_content'
+	 *                              - Automatically searched if it's not provided
+	 * @param string $client        The client ('administrator' or 'site')
+	 *                              - Automatically searched if it's not provided
+	 *
+	 * @return bool|JModelLegacy|null
+	 */
+	public static function getModel($modelSufix, $componentName = '', $client = '')
+	{
+		$app = JFactory::getApplication();
+		if (empty($componentName))
+		{
+			$componentName = $app->input->get('option');
+		}
+
+		$model    = null;
+		$mainPath = $app->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
+
+		// If the file exists, let's
+		if (file_exists($mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php'))
+		{
+			require_once $mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php';
+
+			$prefix = ucfirst(substr($componentName, strpos($componentName, "_") + 1)) . 'Model';
+			$model  = JModelLegacy::getInstance($modelSufix, $prefix);
+		}
+
+		return $model;
 	}
 }

@@ -82,7 +82,7 @@ abstract class ThomisticusHelperAsset extends JHtml
 	 *
 	 * @return bool  True if all strings ins array has been added
 	 */
-	public static function includeLanguageVariablesToJS(array $languages)
+	public static function loadJSLanguageVariables(array $languages)
 	{
 		if (is_array($languages))
 		{
@@ -131,5 +131,27 @@ abstract class ThomisticusHelperAsset extends JHtml
 		}
 
 		return false;
+	}
+
+	/**
+	 * Add JUri basic support to view
+	 * Eg: <script> var base_url = Joomla.JUri.base(); </script>
+	 */
+	public static function loadJSUriSupport()
+	{
+		JFactory::getDocument()->addScriptDeclaration('
+				var Joomla = (Joomla || {}); 
+				Joomla.JUri = { 
+				    base : function(pathonly) {
+				        return pathonly ? "' . JUri::base(true) . '" : "' . JUri::base() . '";
+				    },
+				    root : function(pathonly) {
+				        return pathonly ? "' . JUri::root(true) . '" : "' . JUri::root() . '";
+				    },
+				    current : function() {
+				        return "' . JUri::current() . '";
+				    }
+				}; 
+		');
 	}
 }

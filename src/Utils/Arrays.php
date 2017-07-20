@@ -94,4 +94,55 @@ class Arrays
 
 		return isset($array[0]) && is_array($array[0]);
 	}
+
+	/**
+	 * Replaces the name of an array of attributes belonging to a given array.
+	 * Where the array key is the old name of the key and the value of the new name to be assigned
+	 *
+	 * @param array $item           The array to be treated
+	 * @param array $fromTosColumns The array with old names (key) and new names (value)
+	 *                              eg: array('oldAttrName' => 'newAttrName')
+	 *
+	 * @return array
+	 */
+	public static function treatFromToColumns($item, $fromTosColumns)
+	{
+		foreach ($fromTosColumns as $key => $value)
+		{
+			if (isset($item[$key]))
+			{
+				$item[$value] = $item[$key];
+				unset($item[$key]);
+			}
+		}
+
+		return $item;
+	}
+
+
+	/**
+	 * Replaces the values of an attribute belonging to a given array, by the values present in an multidimensional array
+	 * where key is the old value and the new value to be assigned
+	 *
+	 * @param array $item          The array to be treated
+	 * @param array $fromTosValues The multidimensional array with column and old/new values
+	 *                             eg: array('name' => array('Augustine' => 'Thomas'));
+	 *
+	 * @return array
+	 */
+	public static function treatFromToValues($item, $fromTosValues)
+	{
+		foreach ($fromTosValues as $column => $values)
+		{
+			foreach ($values as $oldValue => $newValue)
+			{
+				if ($item[$column] == $oldValue)
+				{
+					$item[$column] = $newValue;
+				}
+			}
+		}
+
+		return $item;
+	}
 }
