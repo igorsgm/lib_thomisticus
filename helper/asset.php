@@ -38,11 +38,6 @@ abstract class ThomisticusHelperAsset extends JHtml
 
 		$toLoad = "$extension/$filename";
 
-		if ($extension == "phpJs")
-		{
-			$toLoad = 'thomisticus/vendor/phpJs/' . $filename;
-		}
-
 		// Discover the asset type from the file name
 		$type = substr($filename, (strrpos($filename, '.') + 1));
 

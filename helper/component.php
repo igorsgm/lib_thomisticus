@@ -7,6 +7,8 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
+use Thomisticus\Utils\Arrays;
+
 defined('_JEXEC') or die;
 
 /**
@@ -66,10 +68,18 @@ abstract class ThomisticusHelperComponent
 			$componentName = $app->input->get('option');
 		}
 
-		$model    = null;
-		$mainPath = $app->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
+		if (empty($client))
+		{
+			$mainPath = $app->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
+		}
+		else
+		{
+			$mainPath = $client == 'administrator' ? JPATH_ADMINISTRATOR : JPATH_SITE;
+		}
 
-		// If the file exists, let's
+		$model = null;
+
+		// If the file exists, let's require it
 		if (file_exists($mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php'))
 		{
 			require_once $mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php';

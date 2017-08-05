@@ -17286,6 +17286,7 @@ function empty (mixedVar) {
   //    input by: LH
   //    input by: Stoyan Kyosev (http://www.svest.org/)
   // bugfixed by: Kevin van Zonneveld (http://kvz.io)
+  // bugfixed by: Igor Moraes (https://www.linkedin.com/in/igorsgm/)
   //   example 1: empty(null)
   //   returns 1: true
   //   example 2: empty(undefined)
@@ -17297,28 +17298,17 @@ function empty (mixedVar) {
   //   example 5: empty({'aFunc' : function () { alert('humpty'); } })
   //   returns 5: false
 
-  var undef
-  var key
-  var i
-  var len
-  var emptyValues = [undef, null, false, 0, '', '0']
-
-  for (i = 0, len = emptyValues.length; i < len; i++) {
-    if (mixedVar === emptyValues[i]) {
-      return true
-    }
-  }
-
-  if (typeof mixedVar === 'object') {
-    for (key in mixedVar) {
-      if (mixedVar.hasOwnProperty(key)) {
-        return false
-      }
-    }
-    return true
-  }
-
-  return false
+	var key;
+	if (mixedVar === "" || mixedVar === 0 || mixedVar === "0" || mixedVar === null || mixedVar === false || mixedVar === undefined || mixedVar.length === 0) {
+		return true;
+	}
+	if (typeof mixedVar === 'object') {
+		for (key in mixedVar) {
+			return false;
+		}
+		return true;
+	}
+	return false;
 }
 
 function floatval (mixedVar) {

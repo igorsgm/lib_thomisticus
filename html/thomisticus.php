@@ -20,7 +20,7 @@ abstract class JHtmlThomisticus
 {
 	/**
 	 * Extension name to use in the asset calls
-	 * Basically the media/com_xxxxx folder to use
+	 * Basically the media/com_namecomponent folder to use
 	 */
 	const EXTENSION = 'thomisticus';
 
@@ -115,6 +115,7 @@ abstract class JHtmlThomisticus
 	 * Load jQuery Mask
 	 *
 	 * @return void
+	 * @read https://igorescobar.github.io/jQuery-Mask-Plugin/
 	 */
 	public static function mask()
 	{
@@ -124,6 +125,24 @@ abstract class JHtmlThomisticus
 		}
 
 		ThomisticusHelperAsset::load('vendor/mask/jquery.mask.min.js', self::EXTENSION);
+
+		static::$loaded[__METHOD__] = true;
+	}
+
+	/**
+	 * Load jQuery InputMask
+	 *
+	 * @return void
+	 * @read https://github.com/RobinHerbots/Inputmask
+	 */
+	public static function inputMask()
+	{
+		if (!empty(static::$loaded[__METHOD__]))
+		{
+			return;
+		}
+
+		ThomisticusHelperAsset::load('vendor/inputMask/jquery.inputmask.bundle.min.js', self::EXTENSION);
 
 		static::$loaded[__METHOD__] = true;
 	}

@@ -18,13 +18,59 @@ class Arrays
 	 * Remove multiple elements in an array
 	 *
 	 * @param array $array            Array that will have the elements removed
-	 * @param array $elementsToRemove Array with elements to be removed
+	 * @param array $elementsToRemove Array with element keys to be removed
 	 *
 	 * @return array
 	 */
 	public static function remove($array, $elementsToRemove)
 	{
 		return array_diff_key($array, array_flip($elementsToRemove));
+	}
+
+	/**
+	 * Remove multiple elements in an array by value
+	 *
+	 * @param array        $array    Array that will have the element removed
+	 * @param array|string $toRemove Array with elements to be removed or single string (value) to be removed
+	 *
+	 * @return array
+	 */
+	public static function removeByValues($array, $toRemove)
+	{
+		if (is_array($toRemove))
+		{
+			$keysToRemove = array();
+			foreach ($toRemove as $element)
+			{
+				if (($key = array_search($element, $array)) !== false)
+				{
+					array_push($keysToRemove, $key);
+				}
+			}
+
+			$array = self::remove($array, $keysToRemove);
+		}
+		else
+		{
+			if (($key = array_search($toRemove, $array)) !== false)
+			{
+				unset($array[$key]);
+			}
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Returns the first element in an array.
+	 *
+	 * @param  array $array
+	 *
+	 * @return mixed
+	 */
+	public static function first(array $array)
+	{
+		return reset($array);
 	}
 
 	/**
