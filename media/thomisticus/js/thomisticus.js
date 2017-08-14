@@ -39,6 +39,22 @@
 
 
 	/**
+	 * Limpar determinados elementos de um array (Ex: para remover os undefined de um array, myArray.clean(undefined))
+	 * @param valueToDelete
+	 * @returns {Array}
+	 */
+	Array.prototype.clean = function (valueToDelete) {
+		for (var i = 0; i < this.length; i++) {
+			if (this[i] == valueToDelete) {
+				this.splice(i, 1);
+				i--;
+			}
+		}
+		return this;
+	};
+
+
+	/**
 	 * Validar campos utilizando o método da library formValidation
 	 * (Parâmetros: Atributos name dos elementos que serão resetados)
 	 * @read http://formvalidation.io/api/#validate-field
@@ -93,15 +109,21 @@
 	/**
 	 * Esconder um ou mais elementos
 	 *
-	 * @param elementsToHide    = array de elementos que serão escondidos quando a página carregar
-	 * @param checkParents      = boolean se é pra ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {Array}   elementsToHide    = array de elementos que serão escondidos quando a página carregar
+	 * @param {boolean} checkParents      = boolean se é pra ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {boolean} removeRequired    = Se for para remover a propriedade de required para todos os campos que serão removidos
 	 */
-	tHideElements = function (elementsToHide, checkParents) {
+	tHideElements = function (elementsToHide, checkParents, removeRequired) {
 		// False por padrão, caso o parâmetro não tenha sido enviado
 		checkParents = checkParents || false;
 
 		$(elementsToHide).each(function (i, val) {
 			var element = checkParents ? $(val).closest('.control-group') : $(val);
+
+			if (removeRequired) {
+				element.prop('required', false);
+			}
+
 			element.hide();
 		});
 	};
@@ -109,10 +131,11 @@
 	/**
 	 * Adicionar a classe disabled aos campos informados no array
 	 *
-	 * @param elementsToDisable = array de elementos que serão desabilitados
-	 * @param checkControlGroup      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {Array}   elementsToDisable      = array de elementos que serão desabilitados
+	 * @param {boolean} checkControlGroup      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {boolean} removeRequired         = Se for para remover a propriedade de required para todos os campos que serão desabilitados
 	 */
-	tDisableFields = function (elementsToDisable, checkControlGroup) {
+	tDisableFields = function (elementsToDisable, checkControlGroup, removeRequired) {
 		// False por padrão, caso o parâmetro não tenha sido enviado
 		checkControlGroup = checkControlGroup || false;
 
@@ -120,6 +143,10 @@
 			var element = checkControlGroup ? $(val).closest('.control-group') : $(val);
 			element.addClass('disabled');
 			element.attr('disabled', 'true');
+
+			if (removeRequired) {
+				element.prop('required', false);
+			}
 
 			// Se é um select do tipo Chosen
 			if (element.prop("tagName") === 'SELECT' && !empty($(val).data('chosen'))) {
@@ -131,10 +158,11 @@
 	/**
 	 * Remover a classe disabled aos campos informados no array
 	 *
-	 * @param elementsToDisable = array de elementos que serão desabilitados
-	 * @param checkControlGroup      = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {Array}   elementsToDisable   = array de elementos que serão desabilitados
+	 * @param {boolean} checkControlGroup   = boolean se é para ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {boolean} setRequired         = Se for para setar a propriedade de required para todos os campos que serão exibidos
 	 */
-	tEnableFields = function (elementsToDisable, checkControlGroup) {
+	tEnableFields = function (elementsToDisable, checkControlGroup, setRequired) {
 		// False por padrão, caso o parâmetro não tenha sido enviado
 		checkControlGroup = checkControlGroup || false;
 
@@ -142,6 +170,10 @@
 			var element = checkControlGroup ? $(val).closest('.control-group') : $(val);
 			element.removeClass('disabled');
 			element.removeAttr('disabled');
+
+			if (setRequired) {
+				element.prop('required', true);
+			}
 
 			// Se é um select do tipo Chosen
 			if (element.prop("tagName") === 'SELECT' && !empty($(val).data('chosen'))) {
@@ -234,6 +266,10 @@
 	 * @read http://formvalidation.io/api/#reset-field
 	 */
 	tResetFormValidationFields = function (formValidationAttr, elements) {
+		if (!is_array(elements)) {
+			elements = [elements];
+		}
+
 		if (!empty(elements)) {
 			var formValidation = $(formValidationAttr).data('formValidation');
 

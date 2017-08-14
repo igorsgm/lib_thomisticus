@@ -76,7 +76,7 @@ abstract class ThomisticusHelperModel
 	}
 
 	/**
-	 * Generic method to make a insert in the database
+	 * Generic method to make an insert in the database
 	 *
 	 * @param       string       $tableName The table name (eg: #__content)
 	 * @param       array|string $columns   Column or array of columns [eg: '*' | array('id', 'state', 'column_name')]
@@ -107,6 +107,43 @@ abstract class ThomisticusHelperModel
 			->insert($db->quoteName($tableName))
 			->columns($db->quoteName($columns))
 			->values(implode(',', $values));
+
+		return $db->setQuery($query)->execute();
+	}
+
+	/**
+	 * Generic method to make an update in the database
+	 *
+	 * @param string       $tableName  The table name (eg: #__content)
+	 * @param array|string $fields     Fields to set [eg: '*' | array('field' => 'value')]
+	 * @param array        $properties Array of properties to WHERE string [eg: array('id' => 1)]
+	 *
+	 * @return mixed
+	 */
+	public static function update($tableName, $fields, $properties)
+	{
+		if (!is_array($fields))
+		{
+			$fields = array($fields);
+		}
+
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+
+		$fieldsToSet = array();
+		foreach ($fields as $field => $value)
+		{
+			$fieldsToSet[] = ($db->quoteName($field) . ' = ' . $db->quote($value));
+		}
+
+		$conditions = array();
+		foreach ($properties as $property => $value)
+		{
+			$conditions[] = $db->quoteName($property) . ' = ' . $db->quote($value);
+		}
+
+		$query->update($db->quoteName($tableName))->set($fieldsToSet)->where($conditions);
 
 		return $db->setQuery($query)->execute();
 	}
