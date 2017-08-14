@@ -121,7 +121,7 @@
 			var element = checkParents ? $(val).closest('.control-group') : $(val);
 
 			if (removeRequired) {
-				element.prop('required', false);
+				$(val).prop('required', false).removeClass('required').attr('aria-required', false);
 			}
 
 			element.hide();
@@ -145,7 +145,7 @@
 			element.attr('disabled', 'true');
 
 			if (removeRequired) {
-				element.prop('required', false);
+				$(val).prop('required', false).removeClass('required').attr('aria-required', false);
 			}
 
 			// Se é um select do tipo Chosen
@@ -172,7 +172,7 @@
 			element.removeAttr('disabled');
 
 			if (setRequired) {
-				element.prop('required', true);
+				$(val).prop('required', true).addClass('required').attr('aria-required', true);
 			}
 
 			// Se é um select do tipo Chosen
