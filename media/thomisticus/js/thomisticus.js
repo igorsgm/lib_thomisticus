@@ -141,8 +141,7 @@
 
 		$(elementsToDisable).each(function (i, val) {
 			var element = checkControlGroup ? $(val).closest('.control-group') : $(val);
-			element.addClass('disabled');
-			element.attr('disabled', 'true');
+			element.addClass('disabled').attr('disabled', 'true').css('pointer-events', 'none');
 
 			if (removeRequired) {
 				$(val).prop('required', false).removeClass('required').attr('aria-required', false);
@@ -168,8 +167,7 @@
 
 		$(elementsToDisable).each(function (i, val) {
 			var element = checkControlGroup ? $(val).closest('.control-group') : $(val);
-			element.removeClass('disabled');
-			element.removeAttr('disabled');
+			element.removeClass('disabled').removeAttr('disabled').css('pointer-events', '');
 
 			if (setRequired) {
 				$(val).prop('required', true).addClass('required').attr('aria-required', true);
@@ -743,6 +741,23 @@
 		});
 	};
 
+
+	/**
+	 * Checks if a string contains another string
+	 *
+	 * @param {string}    specificString    stirng to check if inside this
+	 * @param {boolean}   toLowerCase       if is to parse string to lower case
+	 * @returns {boolean}
+	 */
+	String.prototype.contains = function (specificString, toLowerCase) {
+
+		if (toLowerCase) {
+			return this.toLowerCase().indexOf(specificString.toLowerCase()) >= 0;
+		}
+
+		return this.indexOf(specificString) >= 0;
+	};
+
 	/**
 	 * MASKS
 	 */
@@ -803,13 +818,15 @@
 	 * Preview an image before it is uploaded (should be called in a "change" input event)
 	 *
 	 * @param input Input Element to upload images
-	 * @param {string} imgAttr  Attribute to identify the img element (where image will be previewed)
-	 * @param {string} maxFileSize  Maximum file size (eg: '500K', '2M')
-	 * @param {function} callBackMaxFileSize  Callback function if file exceeds maxFileSize in bytes
+	 * @param {string}    imgAttr  Attribute to identify the img element (where image will be previewed)
+	 * @param {string}    maxFileSize  Maximum file size (eg: '500K', '2M')
+	 * @param {boolean}   asCssBackground   If it is to preview the image as background
+	 * @param {function}  callBackMaxFileSize  Callback function if file exceeds maxFileSize in bytes
 	 */
-	readUrlImageAndPreview = function (input, imgAttr, maxFileSize, callBackMaxFileSize) {
+	readUrlImageAndPreview = function (input, imgAttr, maxFileSize, asCssBackground, callBackMaxFileSize) {
 		maxFileSize         = convertToBytes(maxFileSize) || false;
 		callBackMaxFileSize = callBackMaxFileSize || false;
+		asCssBackground = asCssBackground || false;
 
 
 		if (input.files && input.files[0]) {
@@ -820,7 +837,11 @@
 			} else {
 				var reader    = new FileReader();
 				reader.onload = function (e) {
-					$(imgAttr).attr('src', e.target.result);
+					if (asCssBackground) {
+						$(imgAttr).css('background-image', 'url(' + e.target.result + ')');
+					} else {
+						$(imgAttr).attr('src', e.target.result);
+					}
 				};
 
 				reader.readAsDataURL(file);
@@ -851,6 +872,21 @@
 				$(this).parents("li").hide();
 			}
 		});
+	};
+
+
+	/* =======================================================================
+	 *                              TABLES
+	 * =======================================================================
+	 */
+
+	/**
+	 * Plugin para retornar todos os tds de uma coluna específica [eg: $('#myTH').getTds()]
+	 */
+	$.fn.getTds = function () {
+		var thIndex = this.index() + 1;
+
+		return this.closest("table").find("tr td:nth-child(" + thIndex + ")");
 	};
 
 	/* =======================================================================

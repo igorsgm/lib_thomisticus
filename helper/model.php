@@ -19,15 +19,15 @@ defined('_JEXEC') or die;
 abstract class ThomisticusHelperModel
 {
 
-	/**
-	 * Generic method to make a select in the database
-	 *
-	 * @param       string       $tableName  The table name (eg: #__content)
-	 * @param       array|string $columns    Column or array of columns [eg: '*' | array('id', 'state', 'column_name')]
-	 * @param array              $properties Array of properties to WHERE string [eg: array('id' => 1)]
-	 *
-	 * @return array            The array of JObjects (query result)
-	 */
+    /**
+     * Generic method to make a select in the database
+     *
+     * @param       string       $tableName  The table name (eg: #__content)
+     * @param       array|string $columns    Column or array of columns [eg: '*' | array('id', 'state', 'column_name')]
+     * @param array              $properties Array of properties to WHERE string [eg: array('id' => 1)]
+     *
+     * @return mixed            The array of JObjects (query result)
+     */
 	public static function select($tableName, $columns, array $properties, $loadType = 'AssocList')
 	{
 		if (!is_array($columns) && $columns !== '*')

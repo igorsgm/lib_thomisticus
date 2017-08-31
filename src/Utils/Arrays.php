@@ -14,6 +14,20 @@ defined('_JEXEC') or die;
 
 class Arrays
 {
+    /**
+     * Checking if all array's item are empty
+     * array_filter will remove all values from array which are equal to null, 0, '' or false
+     *
+     * @param array $array            Array that will be checked
+     * @read https://stackoverflow.com/questions/8328983/check-whether-an-array-is-empty
+     *
+     * @return boolean
+     */
+    public static function isNull($array)
+    {
+        return !array_filter($array);
+    }
+
 	/**
 	 * Remove multiple elements in an array
 	 *
@@ -76,27 +90,28 @@ class Arrays
 	/**
 	 * Check if an array contains all elements from another array
 	 *
-	 * @param array $array            array that supposedly contains all elements
-	 * @param bool  $arrayOnlyKeys    true to consider only array_keys
-	 * @param array $subArray         array to be searched
-	 * @param bool  $subArrayOnlyKeys true to consider only array_keys
+	 * @param array $haystack array that supposedly contains all elements
+	 * @param array $target   array to be searched
 	 *
 	 * @return bool true if all elements|keys of $subArray are an element|key of $array
 	 */
-	public static function insideAnother($array, $arrayOnlyKeys = false, $subArray, $subArrayOnlyKeys = false)
+	public static function insideAnother($haystack, $target)
 	{
-		if ($arrayOnlyKeys)
-		{
-			$array = array_keys($array);
-		}
-
-		if ($subArrayOnlyKeys)
-		{
-			$subArray = array_keys($subArray);
-		}
-
-		return count(array_intersect($subArray, $array)) == count($subArray);
+		return count(array_intersect($target, $haystack)) == count($target);
 	}
+
+    /**
+     * To verify that at least one value in $target is also in $haystack
+     *
+     * @param array $haystack array that supposedly contains the elements
+     * @param array $target   array with values to be searched
+     *
+     * @return bool true if any value of $target is inside $haystack
+     */
+    public static function containsSomeValue($haystack, $target)
+    {
+        return count(array_intersect($haystack, $target)) > 0;
+    }
 
 	/**
 	 * Checks if multiple keys exist in an array

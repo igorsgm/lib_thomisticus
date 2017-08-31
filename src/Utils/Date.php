@@ -9,7 +9,6 @@
 
 namespace Thomisticus\Utils;
 
-use DateTime;
 use JFactory;
 
 defined('_JEXEC') or die;
@@ -42,4 +41,16 @@ class Date
 		$date = str_replace('/', '-', $date);
 		return date($format, strtotime($date));
 	}
+
+    /**
+     * Checks if date is empty
+     *
+     * @param string $date
+     *
+     * @return bool
+     */
+    public static function isEmpty($date)
+    {
+        return (empty($date) || $date === '0000-00-00' || $date === '0000-00-00 00:00:00');
+    }
 }
