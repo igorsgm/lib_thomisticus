@@ -18,15 +18,15 @@ defined('_JEXEC') or die;
  */
 abstract class ThomisticusHelperNumbers
 {
-	/**
-	 * Convert associative array into attributes.
-	 *
-	 * @param   mixed $numbers Number or array of numbers to sum up
-	 *
-	 * @return  string
-	 */
-	public static function sum($numbers)
-	{
-		return array_sum((array) $numbers);
-	}
+    /**
+     * Convert associative array into attributes.
+     *
+     * @param   mixed $numbers Number or array of numbers to sum up
+     *
+     * @return  string
+     */
+    public static function sum($numbers)
+    {
+        return array_sum((array)$numbers);
+    }
 }

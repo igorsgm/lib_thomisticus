@@ -16,31 +16,32 @@ defined('_JEXEC') or die;
 
 class Date
 {
-	/**
-	 * Retrieves formatted datetime according Joomla Global Settings
-	 *
-	 * @param $time
-	 *
-	 * @return string
-	 */
-	public static function getDate($time = 'now')
-	{
-		return JFactory::getDate($time, JFactory::getConfig()->get('offset'))->toSql(true);
-	}
+    /**
+     * Retrieves formatted datetime according Joomla Global Settings
+     *
+     * @param $time
+     *
+     * @return string
+     */
+    public static function getDate($time = 'now')
+    {
+        return JFactory::getDate($time, JFactory::getConfig()->get('offset'))->toSql(true);
+    }
 
-	/**
-	 * Retrieves a formatted date
-	 *
-	 * @param string $date
-	 * @param string $format eg: 'd/m/Y - H:i'
-	 *
-	 * @return false|string
-	 */
-	public static function formatDate($date, $format)
-	{
-		$date = str_replace('/', '-', $date);
-		return date($format, strtotime($date));
-	}
+    /**
+     * Retrieves a formatted date
+     *
+     * @param string $date
+     * @param string $format eg: 'd/m/Y - H:i'
+     *
+     * @return false|string
+     */
+    public static function formatDate($date, $format)
+    {
+        $date = str_replace('/', '-', $date);
+
+        return date($format, strtotime($date));
+    }
 
     /**
      * Checks if date is empty

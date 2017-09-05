@@ -17,9 +17,8 @@ JLoader::registerPrefix('Thomisticus', dirname(__FILE__));
 
 $composerAutoload = __DIR__ . '/vendor/autoload.php';
 
-if (file_exists($composerAutoload))
-{
-	$loader = require_once $composerAutoload;
+if (file_exists($composerAutoload)) {
+    $loader = require_once $composerAutoload;
 }
 
 // Common fields

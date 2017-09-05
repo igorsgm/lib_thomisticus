@@ -7,8 +7,6 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
-use Thomisticus\Utils\Arrays;
-
 defined('_JEXEC') or die;
 
 /**
@@ -20,74 +18,67 @@ defined('_JEXEC') or die;
  */
 abstract class ThomisticusHelperComponent
 {
-	/**
-	 * Gets the item's edit permission for an user in a specific component.
-	 *
-	 * (Method overrided from Component Creator and generalized)
-	 *
-	 * @param  mixed $item          The item
-	 * @param string $componentName The component name (will be picked up automatically from application if not provided)
-	 *
-	 * @return bool
-	 */
-	public static function canUserEdit($item, $componentName = '')
-	{
-		$user = JFactory::getUser();
+    /**
+     * Gets the item's edit permission for an user in a specific component.
+     *
+     * (Method overrided from Component Creator and generalized)
+     *
+     * @param  mixed $item          The item
+     * @param string $componentName The component name (will be picked up automatically from application if not provided)
+     *
+     * @return bool
+     */
+    public static function canUserEdit($item, $componentName = '')
+    {
+        $user = JFactory::getUser();
 
-		if (empty($componentName))
-		{
-			$componentName = JFactory::getApplication()->input->get('option');
-		}
+        if (empty($componentName)) {
+            $componentName = JFactory::getApplication()->input->get('option');
+        }
 
-		if ($user->authorise('core.edit', $componentName) ||
-			isset($item->created_by) && $item->created_by == $user->id && $user->authorise('core.edit.own', $componentName)
-		)
-		{
-			return true;
-		}
+        if ($user->authorise('core.edit', $componentName) ||
+            isset($item->created_by) && $item->created_by == $user->id && $user->authorise('core.edit.own', $componentName)
+        ) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Get an instance of the named model
-	 *
-	 * @param string $modelSufix    Model sufix name. Eg: 'Article'
-	 * @param string $componentName The component name which model belongs to. Eg: 'com_content'
-	 *                              - Automatically searched if it's not provided
-	 * @param string $client        The client ('administrator' or 'site')
-	 *                              - Automatically searched if it's not provided
-	 *
-	 * @return bool|JModelLegacy|null
-	 */
-	public static function getModel($modelSufix, $componentName = '', $client = '')
-	{
-		$app = JFactory::getApplication();
-		if (empty($componentName))
-		{
-			$componentName = $app->input->get('option');
-		}
+    /**
+     * Get an instance of the named model
+     *
+     * @param string $modelSufix    Model sufix name. Eg: 'Article'
+     * @param string $componentName The component name which model belongs to. Eg: 'com_content'
+     *                              - Automatically searched if it's not provided
+     * @param string $client        The client ('administrator' or 'site')
+     *                              - Automatically searched if it's not provided
+     *
+     * @return bool|JModelLegacy|null
+     */
+    public static function getModel($modelSufix, $componentName = '', $client = '')
+    {
+        $app = JFactory::getApplication();
+        if (empty($componentName)) {
+            $componentName = $app->input->get('option');
+        }
 
-		if (empty($client))
-		{
-			$mainPath = $app->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
-		}
-		else
-		{
-			$mainPath = $client == 'administrator' ? JPATH_ADMINISTRATOR : JPATH_SITE;
-		}
+        if (empty($client)) {
+            $mainPath = $app->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
+        } else {
+            $mainPath = $client == 'administrator' ? JPATH_ADMINISTRATOR : JPATH_SITE;
+        }
 
-		$model = null;
+        $model = null;
 
-		// If the file exists, let's require it
-		if (file_exists($mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php'))
-		{
-			require_once $mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php';
+        // If the file exists, let's require it
+        if (file_exists($mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php')) {
+            require_once $mainPath . '/components/' . $componentName . '/models/' . strtolower($modelSufix) . '.php';
 
-			$prefix = ucfirst(substr($componentName, strpos($componentName, "_") + 1)) . 'Model';
-			$model  = JModelLegacy::getInstance($modelSufix, $prefix);
-		}
+            $prefix = ucfirst(substr($componentName, strpos($componentName, "_") + 1)) . 'Model';
+            $model  = JModelLegacy::getInstance($modelSufix, $prefix);
+        }
 
-		return $model;
-	}
+        return $model;
+    }
 }

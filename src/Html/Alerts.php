@@ -19,37 +19,35 @@ defined('_JEXEC') or die;
 class Alerts
 {
 
-	/**
-	 * Returns the html of a system-message-container to be added in the desired location
-	 *
-	 * @param string $content =
-	 * @param bool   $title   = Optional title (will be highlighted)
-	 * @param string $type    = Type of alert ['info' => blue, 'warning' => yellow, 'error' => red, 'success' => green]
-	 *                        or else a custom class "alert- {class}
-	 * @param bool   $dismiss = Close alert button
-	 *
-	 * @return string
-	 */
-	public static function message($content, $title = false, $type = 'info', $dismiss = false, $customClass = null)
-	{
-		$html = '<div id="system-message-container" class="' . $customClass . '">
+    /**
+     * Returns the html of a system-message-container to be added in the desired location
+     *
+     * @param string $content =
+     * @param bool   $title   = Optional title (will be highlighted)
+     * @param string $type    = Type of alert ['info' => blue, 'warning' => yellow, 'error' => red, 'success' => green]
+     *                        or else a custom class "alert- {class}
+     * @param bool   $dismiss = Close alert button
+     *
+     * @return string
+     */
+    public static function message($content, $title = false, $type = 'info', $dismiss = false, $customClass = null)
+    {
+        $html = '<div id="system-message-container" class="' . $customClass . '">
 					<div id="system-message">
 					<div class="no-margin alert alert-' . $type . '">';
 
-		if ($dismiss)
-		{
-			$html .= '<a class="close" data-dismiss="alert">×</a>';
-		}
+        if ($dismiss) {
+            $html .= '<a class="close" data-dismiss="alert">×</a>';
+        }
 
-		if ($title)
-		{
-			$html .= '<h4 class="alert-heading">' . $title . '</h4>';
-		}
+        if ($title) {
+            $html .= '<h4 class="alert-heading">' . $title . '</h4>';
+        }
 
-		$html .= '<div><p>' . $content . '</p></div></div></div></div>';
+        $html .= '<div><p>' . $content . '</p></div></div></div></div>';
 
-		return $html;
-	}
+        return $html;
+    }
 }
 
 ?>

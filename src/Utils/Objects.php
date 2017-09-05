@@ -14,79 +14,70 @@ defined('_JEXEC') or die;
 
 class Objects
 {
-	/**
-	 * Check if multiple properties exists in an object (even if it's null)
-	 *
-	 * @param \stdClass    $object     Object to be verified
-	 * @param array|string $properties String array of properties or a single property
-	 *
-	 * @return bool true if all properties belongs to the object
-	 */
-	public static function propertyExists($object, $properties)
-	{
-		if (!is_array($properties))
-		{
-			return property_exists($object, $properties);
-		}
+    /**
+     * Replaces the name of an array of attributes belonging to an object.
+     * Where the array key is the old name of the attribute and the value of the new name to be assigned
+     *
+     * @param object|\JObject|mixed $item           The object to be treated
+     * @param array                 $fromTosColumns The array with old names (key) and new names (value)
+     *                                              eg: array('oldAttrName' => 'newAttrName')
+     *
+     * @return object|\JObject|mixed
+     */
+    public static function treatFromToColumns($item, $fromTosColumns)
+    {
+        foreach ($fromTosColumns as $key => $value) {
+            if (self::propertyExists($item, array($value, $key))) {
+                $item->$value = $item->$key;
+                unset($item->$key);
+            }
+        }
 
-		$allPropertiesExists = false;
-		foreach ($properties as $property)
-		{
-			$allPropertiesExists = property_exists($object, $property);
-		}
+        return $item;
+    }
 
-		return $allPropertiesExists;
-	}
+    /**
+     * Check if multiple properties exists in an object (even if it's null)
+     *
+     * @param \stdClass    $object     Object to be verified
+     * @param array|string $properties String array of properties or a single property
+     *
+     * @return bool true if all properties belongs to the object
+     */
+    public static function propertyExists($object, $properties)
+    {
+        if (!is_array($properties)) {
+            return property_exists($object, $properties);
+        }
 
+        $allPropertiesExists = false;
+        foreach ($properties as $property) {
+            $allPropertiesExists = property_exists($object, $property);
+        }
 
-	/**
-	 * Replaces the name of an array of attributes belonging to an object.
-	 * Where the array key is the old name of the attribute and the value of the new name to be assigned
-	 *
-	 * @param object|\JObject|mixed $item           The object to be treated
-	 * @param array                 $fromTosColumns The array with old names (key) and new names (value)
-	 *                                              eg: array('oldAttrName' => 'newAttrName')
-	 *
-	 * @return object|\JObject|mixed
-	 */
-	public static function treatFromToColumns($item, $fromTosColumns)
-	{
-		foreach ($fromTosColumns as $key => $value)
-		{
-			if (self::propertyExists($item, array($value, $key)))
-			{
-				$item->$value = $item->$key;
-				unset($item->$key);
-			}
-		}
+        return $allPropertiesExists;
+    }
 
-		return $item;
-	}
+    /**
+     * Replaces the values of an attribute belonging to an object, by the values present in an multidimensional array
+     * where key is the old value and the new value to be assigned
+     *
+     * @param \JObject|object|mixed $item          The object to be treated
+     * @param array                 $fromTosValues The multidimensional array with column and old/new values
+     *                                             eg: array('name' => array('Augustine' => 'Thomas'));
+     *
+     * @return \JObject|object|mixed
+     */
+    public static function treatFromToValues($item, $fromTosValues)
+    {
+        foreach ($fromTosValues as $column => $values) {
+            foreach ($values as $oldValue => $newValue) {
+                if ($item->$column == $oldValue) {
+                    $item->$column = $newValue;
+                }
+            }
+        }
 
-
-	/**
-	 * Replaces the values of an attribute belonging to an object, by the values present in an multidimensional array
-	 * where key is the old value and the new value to be assigned
-	 *
-	 * @param \JObject|object|mixed $item          The object to be treated
-	 * @param array                 $fromTosValues The multidimensional array with column and old/new values
-	 *                                             eg: array('name' => array('Augustine' => 'Thomas'));
-	 *
-	 * @return \JObject|object|mixed
-	 */
-	public static function treatFromToValues($item, $fromTosValues)
-	{
-		foreach ($fromTosValues as $column => $values)
-		{
-			foreach ($values as $oldValue => $newValue)
-			{
-				if ($item->$column == $oldValue)
-				{
-					$item->$column = $newValue;
-				}
-			}
-		}
-
-		return $item;
-	}
+        return $item;
+    }
 }

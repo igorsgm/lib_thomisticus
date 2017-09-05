@@ -9,7 +9,6 @@
 
 namespace Thomisticus\Helper;
 
-use JFactory;
 use JParameter;
 
 defined('_JEXEC') or die;
