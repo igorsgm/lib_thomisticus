@@ -1,6 +1,12 @@
 (function ($) {
 
 	$(document).ready(function () {
+		$('select').chosen({
+			placeholder_text_single:   Joomla.JText._('JGLOBAL_SELECT_AN_OPTION'),
+			placeholder_text_multiple: Joomla.JText._('JGLOBAL_SELECT_SOME_OPTIONS'),
+			no_results_text:           Joomla.JText._('JGLOBAL_SELECT_NO_RESULTS_MATCH')
+		});
+
 		$('select').chosen().chosenReadonly();
 	});
 
@@ -112,19 +118,47 @@
 	 * @param {Array}   elementsToHide    = array de elementos que serão escondidos quando a página carregar
 	 * @param {boolean} checkParents      = boolean se é pra ocultar os dois parentes (útil quando quer ocultar o control-group)
 	 * @param {boolean} removeRequired    = Se for para remover a propriedade de required para todos os campos que serão removidos
+	 * @param {boolean} resetField        = true se for para limpar o campo
 	 */
-	tHideElements = function (elementsToHide, checkParents, removeRequired) {
+	tHideElements = function (elementsToHide, checkParents, removeRequired, resetField) {
 		// False por padrão, caso o parâmetro não tenha sido enviado
 		checkParents = checkParents || false;
+		resetField   = resetField || false;
 
 		$(elementsToHide).each(function (i, val) {
 			var element = checkParents ? $(val).closest('.control-group') : $(val);
+
+			if (resetField) {
+				tResetFields(val);
+			}
 
 			if (removeRequired) {
 				$(val).prop('required', false).removeClass('required').attr('aria-required', false);
 			}
 
 			element.hide();
+		});
+	};
+
+	/**
+	 * Exibir um ou mais elementos
+	 *
+	 * @param {Array}   elementsToShow    = array de elementos que serão exibidos
+	 * @param {boolean} checkParents      = boolean se é pra ocultar os dois parentes (útil quando quer ocultar o control-group)
+	 * @param {boolean} setRequired       = Se for para adicionar a propriedade de required para todos os campos que serão exibidos
+	 */
+	tShowElements = function (elementsToShow, checkParents, setRequired) {
+		// False por padrão, caso o parâmetro não tenha sido enviado
+		checkParents = checkParents || false;
+
+		$(elementsToShow).each(function (i, val) {
+			var element = checkParents ? $(val).closest('.control-group') : $(val);
+
+			if (setRequired) {
+				$(val).prop('required', true).addClass('required').attr('aria-required', true);
+			}
+
+			element.show().removeClass('hidden');
 		});
 	};
 
@@ -348,6 +382,27 @@
 		elements.trigger('chosen:updated');
 
 		return this;
+	};
+
+	/**
+	 * Plugin para popular um select a partir de um objeto
+	 *
+	 * @param {object} options      No formato {value: text}
+	 * @param {boolean} toClear     true por default. Irá limpar os campos do select
+	 */
+	$.fn.populateChosen = function (options, toClear) {
+		toClear    = toClear || true;
+		var select = this;
+
+		if (toClear) {
+			select.empty();
+		}
+
+		$.each(options, function (value, name) {
+			select.append('<option value="' + value + '">' + name + '</option>');
+		});
+
+		select.trigger('liszt:updated').trigger("chosen:updated");
 	};
 
 	/**
@@ -826,7 +881,7 @@
 	readUrlImageAndPreview = function (input, imgAttr, maxFileSize, asCssBackground, callBackMaxFileSize) {
 		maxFileSize         = convertToBytes(maxFileSize) || false;
 		callBackMaxFileSize = callBackMaxFileSize || false;
-		asCssBackground = asCssBackground || false;
+		asCssBackground     = asCssBackground || false;
 
 
 		if (input.files && input.files[0]) {
@@ -873,6 +928,37 @@
 			}
 		});
 	};
+
+
+	/**
+	 * Plugin para popular um formulário a partir dos dados de uma request
+	 *
+	 * @param data  Os dados que serão preenchidos no formulário
+	 * @param onlyHiddens   Se é para popular apenas os campos que estão escondidos
+	 * @param onlyIfEmpty   Inserir o valor do campo apenas se o seu value for vazio
+	 */
+	$.fn.populateJForm = function (data, onlyHiddens, onlyIfEmpty) {
+		var form = this;
+
+		if (form.prop("tagName") !== 'FORM') {
+			return false;
+		}
+
+		onlyHiddens = onlyHiddens || false;
+		onlyIfEmpty = onlyIfEmpty || false;
+
+		$.each(data, function (column, value) {
+			var element      = form.find('[name="jform[' + column + ']"]'),
+			    validTags    = ['INPUT', 'SELECT', 'TEXTAREA'],
+			    invalidTypes = ['radio', 'checkbox'],
+			    fillElement  = !empty(element) && !in_array(element.attr('type'), invalidTypes) && in_array(element.prop("tagName"), validTags)
+				    && (onlyHiddens ? element.attr('type') === 'hidden' : true) && (onlyIfEmpty ? empty(element.val()) : true);
+
+			if (fillElement) {
+				element.val(value).trigger('liszt:updated');
+			}
+		});
+	}
 
 
 	/* =======================================================================

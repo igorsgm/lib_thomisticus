@@ -36,5 +36,6 @@
 
     <plugins>
         <plugin group="ajax" plugin="thomisticus"/>
+        <plugin group="system" plugin="thomisticusexcel"/>
     </plugins>
 </extension>

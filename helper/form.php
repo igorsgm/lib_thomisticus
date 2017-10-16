@@ -90,6 +90,16 @@ abstract class ThomisticusHelperForm
         return $filesString;
     }
 
+
+    /**
+     * Method to get an instance of a form.
+     *
+     * @param string $componentName The name of the component
+     * @param string $viewName      The name of the view
+     * @param string $client        The client ('administrator' or 'site')
+     *
+     * @return  JForm  JForm instance.
+     */
     public static function getForm($componentName = '', $viewName = '', $client = '')
     {
         $app = JFactory::getApplication();
@@ -108,8 +118,29 @@ abstract class ThomisticusHelperForm
             $mainPath = $client == 'administrator' ? JPATH_ADMINISTRATOR : JPATH_SITE;
         }
 
-        $teste = JForm::addFormPath($mainPath . '/components/' . $componentName . '/models/forms');
+        JForm::addFormPath($mainPath . '/components/' . $componentName . '/models/forms');
 
         return JForm::getInstance($componentName . '.' . $viewName, $viewName);
     }
+
+
+    /**
+     * Method to get attributes from a JForm
+     *
+     * @param  JForm $form The form XML object
+     *
+     * @return array
+     */
+    public static function getFormAttributes($form)
+    {
+        $attributes = array();
+
+        foreach ($form->getXml()->fieldset->children() as $element) {
+            $attributes[] = (string)$element->attributes()->name;
+        }
+
+        return $attributes;
+    }
+
+
 }

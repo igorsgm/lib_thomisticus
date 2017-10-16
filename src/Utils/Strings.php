@@ -24,7 +24,7 @@ class Strings
      *
      * @see https://github.com/jbroadway/urlify/blob/master/URLify.php
      */
-    public static $maps = array(
+    public static $mapsASCII = array(
         'de' => array(/* German */
             'Ä' => 'Ae', 'Ö' => 'Oe', 'Ü' => 'Ue', 'ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss',
             'ẞ' => 'SS'
@@ -142,7 +142,7 @@ class Strings
      *
      * @see https://github.com/jbroadway/urlify/blob/master/URLify.php
      */
-    private static $map = array();
+    private static $mapASCII = array();
 
     /**
      * The character list as a string.
@@ -166,6 +166,40 @@ class Strings
     private static $language = '';
 
     /**
+     * Basic rules of PT-BR singularization/pluralization to Inflector.
+     * Used in singularize and pluralize
+     * @see https://github.com/doctrine/inflector
+     */
+    public static $inflectorRulesPtBr = array(
+        //singular     plural
+        'ão' => 'ões',
+        'ao' => 'oes',
+        'ês' => 'eses',
+        'es' => 'eses',
+        'm'  => 'ns',
+        'l'  => 'is',
+        'r'  => 'res',
+        'x'  => 'xes',
+        'z'  => 'zes',
+    );
+
+    /**
+     * Exceptions to the rules of PT-BR pluralization and singularization of Inflector.
+     * Used in singularize and pluralize
+     * @see https://github.com/doctrine/inflector
+     */
+    public static $inflectorExeptionsPtBr = array(
+        'cidadão'  => 'cidadãos',
+        'cidadao'  => 'cidadaos',
+        'mão'      => 'mãos', 'mao'      => 'maos',
+        'qualquer' => 'quaisquer',
+        'campus'   => 'campi',
+        'lápis'    => 'lápis', 'lapis'   => 'lapis',
+        'ônibus'   => 'ônibus', 'onibus' => 'onibus',
+    );
+
+
+    /**
      * Initializes the character map.
      *
      * Part of the URLify.php Project <https://github.com/jbroadway/urlify/>
@@ -174,27 +208,27 @@ class Strings
      */
     private static function initLanguageMap($language = '')
     {
-        if (count(self::$map) > 0 && (($language == '') || ($language == self::$language))) {
+        if (count(self::$mapASCII) > 0 && (($language == '') || ($language == self::$language))) {
             return;
         }
 
         // Is a specific map associated with $language?
-        if (isset(self::$maps[$language]) && is_array(self::$maps[$language])) {
+        if (isset(self::$mapsASCII[$language]) && is_array(self::$mapsASCII[$language])) {
             // Move this map to end. This means it will have priority over others
-            $m = self::$maps[$language];
-            unset(self::$maps[$language]);
-            self::$maps[$language] = $m;
+            $m = self::$mapsASCII[$language];
+            unset(self::$mapsASCII[$language]);
+            self::$mapsASCII[$language] = $m;
         }
 
         // Reset static vars
         self::$language = $language;
-        self::$map      = array();
+        self::$mapASCII = array();
         self::$chars    = '';
 
-        foreach (self::$maps as $map) {
+        foreach (self::$mapsASCII as $map) {
             foreach ($map as $orig => $conv) {
-                self::$map[$orig] = $conv;
-                self::$chars      .= $orig;
+                self::$mapASCII[$orig] = $conv;
+                self::$chars           .= $orig;
             }
         }
 
@@ -382,8 +416,8 @@ class Strings
             if (preg_match_all(self::$regex, $text, $matches)) {
                 for ($i = 0; $i < count($matches[0]); $i++) {
                     $char = $matches[0][$i];
-                    if (isset(self::$map[$char])) {
-                        $text = str_replace($char, self::$map[$char], $text);
+                    if (isset(self::$mapASCII[$char])) {
+                        $text = str_replace($char, self::$mapASCII[$char], $text);
                     }
                 }
             }
@@ -425,53 +459,92 @@ class Strings
     }
 
     /**
-     * Converts a pt-BR word from the plural to the singular
-     * Warning: The word loses accentuation
+     * Adds an exception to $inflectorExeptionsPtBr array
+     *
+     * @param  string $singularWord Word in the singular
+     * @param  string $pluralWord   Word in the plural
+     *
+     * @return bool
+     */
+    public static function addInflectorPtBrException($singularWord, $pluralWord)
+    {
+        self::$inflectorExeptionsPtBr[$singularWord] = $pluralWord;
+
+        return true;
+    }
+
+    /**
+     * Adds a rule to $inflectorRulesPtBr array
+     *
+     * @param  string $singularSufix Singular word termination
+     * @param  string $pluralSufix   Plural word termination
+     *
+     * @return bool
+     */
+    public static function addInflectorPtBrRule($singularSufix, $pluralSufix)
+    {
+        self::$inflectorRulesPtBr[$singularSufix] = $pluralSufix;
+
+        return true;
+    }
+
+    /**
+     * Converts a pt-BR word from the singular to the plural
      *
      * You can use with regular expression catch phrase expression to convert all words from a string to the singular:
-     * $text = preg_replace_callback('#[A-ZÀ-Úa-zà-ú]+(?:-[A-ZÀ-Úa-zà-ú]+)*#', 'pluraltosingular', $text);
+     * $text = preg_replace_callback('#[A-ZÀ-Úa-zà-ú]+(?:-[A-ZÀ-Úa-zà-ú]+)*#', 'pluralize', $text);
      *
-     * @param string $word Plural word to be
+     * @param string $word Singular word to be parsed
      *
      * @return bool|string
      */
-    public static function toSingular($word)
+    public static function pluralizePtBr($word)
     {
-        $word = self::removeAccents($word);
-
-        if (substr($word, -1) != 's') {
-            return $word;
-        }
-        switch ($word) {
-            // albuns batons marrons
-            case (substr($word, -2, 1) == 'n'):
-                return substr($word, 0, -2) . 'm';
-
-            // flores gizes vezes tenis
-            case (strpos('aeou', substr($word, 0, 1)) === false && substr($word, -2, 1) == 'e' && strpos('nrsz', substr($word, -3, 1)) !== false):
-                return substr($word, 0, -2);
-
-            // aneis anzois jornais
-            case (substr($word, -2) == 'is' && strpos('aeiou', substr($word, -3, 1)) !== false):
-                return substr($word, 0, -2) . 'l';
-
-            // frances portugues
-            case (substr($word, -2) == 'es' && strpos('clu', substr($word, -3, 1)) !== false):
-                return $word;
-
-            // caes paes
-            case (substr($word, -3) == 'aes'):
-                return substr($word, 0, -2) . 'o';
-
-            // leoes
-            case (substr($word, -3) == 'oes'):
-                return substr($word, 0, -3) . 'ao';
-
-            // exceto onibus lapis tenis arvores
-            case (strpos('ius', substr($word, -2, 1)) === false && substr($word, -3, 1) != 'n'):
-                return substr($word, 0, -1);
+        // Does it belong to the $inflectorExeptionsPtBr ?
+        if (array_key_exists($word, self::$inflectorExeptionsPtBr)) {
+            return self::$inflectorExeptionsPtBr[$word];
         }
 
-        return $word;
+        // It's no exception .. But does it belongs to some rule?
+        foreach (self::$inflectorRulesPtBr as $singular => $plural) {
+            if (preg_match("({$singular}$)", $word)) {
+                return preg_replace("({$singular}$)", $plural, $word);
+            }
+        }
+
+        // Does not belong to exceptions or rules
+        // If it does not end with "s", add one.
+        return (substr($word, -1) !== 's') ? $word . 's' : $word;
+    }
+
+    /**
+     * Converts a pt-BR word from the plural to the singular
+     *
+     * You can use with regular expression catch phrase expression to convert all words from a string to the singular:
+     * $text = preg_replace_callback('#[A-ZÀ-Úa-zà-ú]+(?:-[A-ZÀ-Úa-zà-ú]+)*#', 'singularize', $text);
+     *
+     * @param string $word Plural word to be parsed
+     *
+     * @return bool|string
+     */
+    public static function singularizePtBr($word)
+    {
+        // Does it belong to the $inflectorExeptionsPtBr ?
+        if (in_array($word, self::$inflectorExeptionsPtBr)) {
+            $invert = array_flip(self::$inflectorExeptionsPtBr);
+
+            return $invert[$word];
+        }
+
+        // It's no exception .. But does it belongs to some rule?
+        foreach (self::$inflectorRulesPtBr as $singular => $plural) {
+            if (preg_match("({$plural}$)", $word)) {
+                return preg_replace("({$plural}$)", $singular, $word);
+            }
+        }
+
+        // Does not belong to exceptions or rules
+        // Delete the last char only if it is an "s" at the end
+        return (substr($word, -1) == 's') ? substr($word, 0, -1) : $word;
     }
 }

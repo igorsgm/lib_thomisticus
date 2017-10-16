@@ -12,7 +12,7 @@ use Thomisticus\Utils\Numbers;
 defined('_JEXEC') or die;
 
 /**
- * Asset helper
+ * File helper
  *
  * @package     Thomisticus.Library
  * @subpackage  Helper
@@ -147,4 +147,5 @@ abstract class ThomisticusHelperFile
 
         return $folders;
     }
+
 }
