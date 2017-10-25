@@ -466,6 +466,43 @@
 		}
 	};
 
+	/**
+	 * Evitar que a mesma option seja selecionada em mais de um select.
+	 * Geralmente utilizado quando há mais de um select com as mesmas opções
+	 *
+	 * @param {Array}   selectsSelectorsToMonitor
+	 */
+	disableEqualOptionInAnotherSelect = function (selectsSelectorsToMonitor) {
+
+		var selects = $(implode(', ', selectsSelectorsToMonitor));
+
+		selects.change(function () {
+			var selectedOption = $(this).val();
+
+			if (selectedOption === "") {
+				return false;
+			}
+
+			var otherSelectsSelectedOptions = [];
+			selects.each(function () {
+				otherSelectsSelectedOptions.push(this.value);
+			});
+
+			selects.not(this).each(function () {
+				$('option', this).each(function () {
+					var sel = $(this).val();
+					if (sel === selectedOption) {
+						$(this).prop('disabled', true);
+					} else if (!in_array(sel, otherSelectsSelectedOptions)) {
+						$(this).prop('disabled', false);
+					}
+				});
+			});
+
+			selects.trigger("liszt:updated");
+		}).change(); // Trigger once to add options at load of first
+	};
+
 	/* =======================================================================
 	 *                              DATES
 	 * =======================================================================

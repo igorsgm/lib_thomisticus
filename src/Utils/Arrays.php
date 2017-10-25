@@ -205,4 +205,70 @@ class Arrays
 	{
 		return array_intersect_key($array, array_flip($keys));
 	}
+
+	/**
+	 * Move an element to very first array's position
+	 *
+	 * @param array          $array Array with values
+	 * @param string|integer $key   key that will go to the first position
+	 *
+	 * @return array
+	 */
+	public static function moveToTop($array, $key)
+	{
+		$temp = array($key => $array[$key]);
+		unset($array[$key]);
+
+		return $temp + $array;
+	}
+
+	/**
+	 * Move an element to last array's position
+	 *
+	 * @param array          $array Array with values
+	 * @param string|integer $key   key that will go to the last position
+	 *
+	 * @return array
+	 */
+	public static function moveToBottom($array, $key)
+	{
+		$value = $array[$key];
+		unset($array[$key]);
+		$array[$key] = $value;
+
+		return $array;
+	}
+
+	/**
+	 * Remove all null/empty/false values from the given array.
+	 * Alias for array_filter
+	 *
+	 * @param array $array Array that will be cleaned
+	 *
+	 * @return array
+	 */
+	public static function clean($array)
+	{
+		return array_filter($array);
+	}
+
+	/**
+	 * Orders a multidimensional array by specific key value
+	 *
+	 * @param array  $array Array to be ordered
+	 * @param string $key   Array key to be considered as ordenation's parameter
+	 * @param bool   $desc  true to descending order
+	 *
+	 * @see https://stackoverflow.com/questions/2699086/sort-multi-dimensional-array-by-value
+	 *
+	 * @return mixed
+	 */
+	public static function orderByValue($array, $key, $desc = false)
+	{
+		uasort($array, function ($a, $b) use ($key, $desc) {
+			return $desc ? ($b[$key] - $a[$key]) : ($a[$key] - $b[$key]);
+		});
+
+		return $array;
+	}
 }

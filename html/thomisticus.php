@@ -45,8 +45,8 @@ abstract class JHtmlThomisticus
 
 		ThomisticusHelperAsset::loadJSUriSupport();
 		ThomisticusHelperAsset::load('vendor/phpJs/phpJs.min.js', self::EXTENSION);
-		ThomisticusHelperAsset::load('thomisticus.js', self::EXTENSION);
-		ThomisticusHelperAsset::load('thomisticus.css', self::EXTENSION);
+		ThomisticusHelperAsset::load('thomisticus.min.js', self::EXTENSION);
+		ThomisticusHelperAsset::load('thomisticus.min.css', self::EXTENSION);
 
 		//		For when languages are added in thomisticus.js
 		ThomisticusHelperAsset::loadJSLanguageKeys(DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . self::EXTENSION
