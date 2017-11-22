@@ -253,6 +253,18 @@ class Arrays
 	}
 
 	/**
+	 * Remove all spaces from the given array
+	 *
+	 * @param array $array Array that will have its elements without spaces
+	 *
+	 * @return array
+	 */
+	public static function removeSpaces($array)
+	{
+		return array_filter(array_map('trim', $array));
+	}
+
+	/**
 	 * Orders a multidimensional array by specific key value
 	 *
 	 * @param array  $array Array to be ordered
