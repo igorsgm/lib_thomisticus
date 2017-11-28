@@ -247,20 +247,9 @@ You can integrate any existing library available on composer/packagist (See [htt
 
 To install/require a new library you only need to run from command line something like:  
 
-`composer require monolog/monolog`
+`composer require guzzlehttp/guzzle`
 
-To provide an example of how a third party library would be used this library includes an example [Monolog](https://github.com/Seldaek/monolog) integration. Example usage of our Monolog based logger:  
-
-```php
-JLoader::import('thomisticus.library');
-
-use Thomisticus\App;
-
-$logger = App::getLog();
-
-// This should add a line on a sample.error.php file inside your logs folder
-$logger->addError('This is a dummy error');
-```
+To provide an example of how a third party library would be used this library includes an example [Guzzle](https://github.com/guzzle/guzzle) integration.  
 
 **Note about composer libraries and git integration:**  
 
