@@ -32,7 +32,7 @@ abstract class ThomisticusHelperMail
      *                                  in order to avoid unwanted characters in the output
      * @param string|array $attachments Email attachments (single string path or array of paths)
      */
-    public static function sendMail($subject, $body, $recipients, $mailFrom = '', $fromName = '', $isHtml = false, $encoding = '', $attachments = array())
+    public static function sendMail($subject, $body, $recipients = null, $mailFrom = '', $fromName = '', $isHtml = false, $encoding = '', $attachments = array())
     {
         $app = JFactory::getApplication();
 
@@ -45,7 +45,11 @@ abstract class ThomisticusHelperMail
             )
             ->isHtml($isHtml);
 
-        if ($isHtml) {
+	    if (empty($recipients)) {
+			$recipients = [$app->get('mailfrom')];
+        }
+
+	    if ($isHtml) {
             $mail->Encoding = !empty($encoding) ? $encoding : 'base64';
         }
 
