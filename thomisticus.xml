@@ -28,10 +28,9 @@
         <folder>js</folder>
     </media>
 
-    <languages folder="languages/site">
-
-        <language tag="en-GB">en-GB/en-GB.lib.thomisticus.ini</language>
-        <language tag="pt-BR">pt-BR/pt-BR.lib.thomisticus.ini</language>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.lib_thomisticus.ini</language>
+        <language tag="pt-BR">pt-BR/pt-BR.lib_thomisticus.ini</language>
     </languages>
 
     <plugins>
