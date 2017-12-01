@@ -32,14 +32,10 @@ class plgAjaxThomisticus extends JPlugin
 
 		$params = $jinput->get('params');
 
-		if (!empty($functionSignature))
-		{
-			try
-			{
+		if (!empty($functionSignature)) {
+			try {
 				$response = call_user_func_array($functionSignature, $params);
-			}
-			catch (Exception $e)
-			{
+			} catch (Exception $e) {
 				$response = false;
 			}
 

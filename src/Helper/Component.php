@@ -24,7 +24,7 @@ class Component
 	 *
 	 * (Method overrided from Component Creator and generalized)
 	 *
-	 * @param  mixed $item The item
+	 * @param  mixed $item          The item
 	 * @param string $componentName The component name (will be picked up automatically from application if not provided)
 	 *
 	 * @return bool
@@ -33,15 +33,13 @@ class Component
 	{
 		$user = JFactory::getUser();
 
-		if (empty($componentName))
-		{
+		if (empty($componentName)) {
 			$componentName = JFactory::getApplication()->input->get('option');
 		}
 
 		if ($user->authorise('core.edit', $componentName) ||
 			isset($item->created_by) && $item->created_by == $user->id && $user->authorise('core.edit.own', $componentName)
-		)
-		{
+		) {
 			return true;
 		}
 
