@@ -193,4 +193,21 @@ abstract class JHtmlThomisticus
 
 		static::$loaded[__METHOD__] = true;
 	}
+
+	/**
+	 * Load Twitter Bootstrap 3
+	 *
+	 * @return void
+	 */
+	public static function bootstrap()
+	{
+		if (!empty(static::$loaded[__METHOD__])) {
+			return;
+		}
+
+		ThomisticusHelperAsset::load('vendor/bootstrap/bootstrap.min.css', self::EXTENSION);
+		ThomisticusHelperAsset::load('vendor/bootstrap/bootstrap.min.js', self::EXTENSION);
+
+		static::$loaded[__METHOD__] = true;
+	}
 }
