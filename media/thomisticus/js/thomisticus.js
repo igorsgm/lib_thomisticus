@@ -234,7 +234,9 @@
 		resetFields  = resetFields || false;
 
 		$(function ($) {
-			$(fieldsetId).change(function () {
+			$(fieldsetId).on('click change', function (event) {
+				event.preventDefault();
+
 				var clickedId = $(this).find('label.active').attr('for');
 
 				$(elementsToShowHide).each(function (i, elm) {
@@ -248,8 +250,8 @@
 					} else {
 						element.show();
 					}
-				});
-			}).change();
+				}).change();
+			});
 		});
 	};
 
