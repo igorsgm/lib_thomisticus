@@ -76,6 +76,43 @@
 		}
 	};
 
+	/**
+	 * Check if CPF is Valid
+	 * @returns {boolean}
+	 */
+	String.prototype.isValidCpf = function () {
+		var cpf = this.onlyNumbers();
+
+		if (cpf.length !== 11) {
+			return false;
+		}
+
+		var partValidation = function (number) {
+			return ((x = number % 11) < 2) ? 0 : 11 - x;
+		};
+
+		var a = [], b = Number(), c = 11;
+
+		for (i = 0; i < 11; i++) {
+			a[i] = cpf.charAt(i);
+			if (i < 9) {
+				b += (a[i] * --c);
+			}
+		}
+
+		a[9] = partValidation(b);
+
+		b = 0;
+		c = 11;
+		for (y = 0; y < 10; y++) {
+			b += (a[y] * c--);
+		}
+
+		a[10] = partValidation(b);
+
+		var expReg = /^0+$|^1+$|^2+$|^3+$|^4+$|^5+$|^6+$|^7+$|^8+$|^9+$/;
+		return !((cpf.charAt(9) !== a[9].toString()) || (cpf.charAt(10) !== a[10].toString()) || cpf.match(expReg));
+	};
 
 	/* =======================================================================
 	 *                              GENERAL
@@ -853,6 +890,15 @@
 	};
 
 	/**
+	 * Remove double spaces from string
+	 *
+	 * @returns {string}
+	 */
+	String.prototype.removeMultipleSpaces = function () {
+		return this.replace(/\s\s+/g, '');
+	};
+
+	/**
 	 * MASKS
 	 */
 
@@ -997,7 +1043,7 @@
 				element.val(value).trigger('liszt:updated');
 			}
 		});
-	}
+	};
 
 
 	/* =======================================================================
