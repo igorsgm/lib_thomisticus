@@ -1031,4 +1031,17 @@ class Strings
 		// Delete the last char only if it is an "s" at the end
 		return (substr($word, -1) == 's') ? substr($word, 0, -1) : $word;
 	}
+
+	/**
+	 * Returns everything after specific substring
+	 *
+	 * @param string $string
+	 * @param string $substring
+	 *
+	 * @return bool|string  false if $substring does not exists in $string
+	 */
+	public static function getStringAfter($string, $substring)
+	{
+		return (($position = strpos($string, $substring)) !== false) ? substr($string, $position + strlen($substring)) : false;
+	}
 }
