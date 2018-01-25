@@ -560,4 +560,70 @@ class Strings
 	{
 		return (($position = strpos($string, $substring)) !== false) ? substr($string, $position + strlen($substring)) : false;
 	}
+
+	/**
+	 * Checks if it is a valid cpf
+	 *
+	 * @param string|integer $cpf
+	 *
+	 * @return bool
+	 */
+	public static function isValidCpf($cpf)
+	{
+		$cpf = self::onlyNumbers($cpf);
+
+		if (strlen($cpf) == 11 && !in_array($cpf, ['00000000000', '11111111111', '22222222222', '33333333333', '44444444444', '55555555555', '66666666666', '77777777777', '88888888888', '99999999999'])) {
+
+			for ($t = 9; $t < 11; $t++) {
+				for ($d = 0, $c = 0; $c < $t; $c++) {
+					$d += $cpf{$c} * (($t + 1) - $c);
+				}
+				$d = ((10 * $d) % 11) % 10;
+				if ($cpf{$c} != $d) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Checks if it is a valid cnpj
+	 *
+	 * @param string|integer $cnpj
+	 *
+	 * @return bool
+	 */
+	public static function isValidCnpj($cnpj)
+	{
+		$cnpj = self::onlyNumbers($cnpj);
+
+		if (strlen($cnpj) == 14) {
+
+			// Validating first check digit
+			for ($i = 0, $j = 5, $sum = 0; $i < 12; $i++) {
+				$sum += $cnpj{$i} * $j;
+				$j   = ($j == 2) ? 9 : $j - 1;
+			}
+			$rest = $sum % 11;
+
+			if ($cnpj{12} == ($rest < 2 ? 0 : 11 - $rest)) {
+
+				// Validating second check digit
+				for ($i = 0, $j = 6, $sum = 0; $i < 13; $i++) {
+					$sum += $cnpj{$i} * $j;
+					$j   = ($j == 2) ? 9 : $j - 1;
+				}
+
+				$rest = $sum % 11;
+
+				return $cnpj{13} == ($rest < 2 ? 0 : 11 - $rest);
+			}
+		}
+
+		return false;
+	}
 }

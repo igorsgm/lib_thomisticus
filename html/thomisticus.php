@@ -108,7 +108,7 @@ abstract class JHtmlThomisticus
 	}
 
 	/**
-	 * Load BootstrapWizard
+	 * Load formValidation
 	 *
 	 * @return  void
 	 */
@@ -122,6 +122,22 @@ abstract class JHtmlThomisticus
 		ThomisticusHelperAsset::load('vendor/formValidation/formValidation.min.js', self::EXTENSION);
 		ThomisticusHelperAsset::load('vendor/formValidation/framework/bootstrap.min.js', self::EXTENSION);
 		ThomisticusHelperAsset::load('vendor/formValidation/language/pt_BR.js', self::EXTENSION);
+
+		static::$loaded[__METHOD__] = true;
+	}
+
+	/**
+	 * Load formValidation Addons
+	 *
+	 * @return  void
+	 */
+	public static function formValidationAddons()
+	{
+		if (!empty(static::$loaded[__METHOD__])) {
+			return;
+		}
+
+		ThomisticusHelperAsset::load('vendor/formValidation/addons/thomisticus.addons.min.js', self::EXTENSION);
 
 		static::$loaded[__METHOD__] = true;
 	}

@@ -63,4 +63,18 @@ abstract class ThomisticusHelperMail
 			$app->enqueueMessage(JText::_('JERROR_SENDING_EMAIL'), 'warning');
 		}
 	}
+
+	/**
+	 * Method to genarate a complete URL to be added in email's body (eg: button link)
+	 *
+	 * @param string $path non-SEF URL
+	 *
+	 * @return string   SEF URL, with domain
+	 */
+	public static function generateUrlToEmail($path)
+	{
+		$url = JRoute::_($path);
+
+		return JUri::root() . str_replace((JUri::base(true) . '/'), '', $url);
+	}
 }

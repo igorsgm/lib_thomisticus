@@ -309,7 +309,7 @@
 				specialElements.removeAttr('checked').removeAttr('selected');
 				specialElements.next().removeClass('btn-success btn-danger active');
 
-				var normalElements = $(field).find('input:text, input:password, input:file, select, textarea');
+				var normalElements = $(field).find('input:text, input:password, input:file, input[type="email"], input[type="number"], input[type="url"], input[type="tel"],select, textarea');
 				normalElements.val('').trigger('liszt:updated');
 
 				return true;
@@ -428,9 +428,12 @@
 	 *
 	 * @param {object} options      No formato {value: text}
 	 * @param {boolean} toClear     true por default. Irá limpar os campos do select
+	 * @param {boolean} considerZeroValueAsEmpty    false pro default. Caso seja true, irá considerar as options 0 do select como string vazia
 	 */
-	$.fn.populateChosen = function (options, toClear) {
-		toClear    = toClear || true;
+	$.fn.populateChosen = function (options, toClear, considerZeroValueAsEmpty) {
+		toClear                  = toClear || true;
+		considerZeroValueAsEmpty = considerZeroValueAsEmpty || false;
+
 		var select = this;
 
 		if (toClear) {
@@ -438,6 +441,7 @@
 		}
 
 		$.each(options, function (value, name) {
+			value = value == 0 && considerZeroValueAsEmpty ? '' : value;
 			select.append('<option value="' + value + '">' + name + '</option>');
 		});
 
@@ -1045,6 +1049,34 @@
 		});
 	};
 
+	/**
+	 * Preview a file name before it is uploaded (should be called in a "change" input event)
+	 *
+	 * @param fileInput Input Element to upload files
+	 * @param {string}    fileNameAttr  Attribute to identify the file element (where file name will be previewed)
+	 * @param {string}    maxFileSize  Maximum file size (eg: '500K', '2M')
+	 * @param {function}  callBackMaxFileSize  Callback function if file exceeds maxFileSize in bytes
+	 */
+	readFileSizeAndPreviewName = function (fileInput, fileNameAttr, maxFileSize, callBackMaxFileSize) {
+		maxFileSize         = convertToBytes(maxFileSize) || false;
+		callBackMaxFileSize = callBackMaxFileSize || false;
+
+		if (fileInput.files && fileInput.files[0]) {
+			var file = fileInput.files[0];
+
+			if (file.size > maxFileSize && typeof callBackMaxFileSize === 'function') {
+				callBackMaxFileSize(fileInput);
+			} else {
+				var reader    = new FileReader();
+				reader.onload = function (e) {
+					$(fileNameAttr).text(file.name);
+				};
+
+				reader.readAsDataURL(file);
+			}
+		}
+	};
+
 
 	/* =======================================================================
 	 *                              TABLES
@@ -1079,6 +1111,10 @@
 		form.submit(function (e) {
 			e.preventDefault();
 			e.stopImmediatePropagation();
+
+			if (form.hasAttr('data-form')) {
+				console.info("%cSubmitting form: ", "font-weight: bold", form.attr('data-form'));
+			}
 
 			if (typeof lazyLoading === "function") {
 				lazyLoading();

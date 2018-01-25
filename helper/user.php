@@ -36,9 +36,7 @@ abstract class ThomisticusHelperUser
 			$componentName = JFactory::getApplication()->input->get('option');
 		}
 
-		if ($user->authorise('core.edit', $componentName) ||
-			isset($item->created_by) && $item->created_by == $user->id && $user->authorise('core.edit.own', $componentName)
-		) {
+		if (!$user->guest && ($user->authorise('core.edit', $componentName) || isset($item->created_by) && $item->created_by == $user->id && $user->authorise('core.edit.own', $componentName))) {
 			return true;
 		}
 
@@ -46,26 +44,47 @@ abstract class ThomisticusHelperUser
 	}
 
 	/**
-	 * Retrieves a list of all Joomla Usergroup's titles. But if provided $id, it'll retrieves only this case.
+	 * Retrieves a list of all Joomla Usergroup's titles. But if provided $id, it'll retrieves this case and its sons.
 	 *
-	 * @param null|string|integer $id Optional
+	 * @param null|string|integer $idUsergroup Optional
 	 *
 	 * @return array in the format ['id' => 'title']
 	 *
 	 * @since version
 	 */
-	public static function getUserGroupList($id = null)
+	public static function getUserGroupList($idUsergroup = null)
 	{
-		$properties = !empty($id) ? ['id' => $id] : [];
+		$db = JFactory::getDbo();
 
-		$results = ThomisticusHelperModel::select('#__usergroups', ['id', 'title'], $properties);
+		$query = $db->getQuery(true);
+
+		$query->select($db->quoteName(['id', 'title']))
+		    ->from($db->quoteName('#__usergroups'));
+
+		if (!empty($idUsergroup)) {
+			$query->where($db->quoteName('id') . ' = '. $db->quote($idUsergroup) . ' OR ' . $db->quoteName('parent_id') . ' = ' . $idUsergroup);
+		}
+
+		$query->order('id ASC');
+
+		$results = $db->setQuery($query)->loadObjectList();
 
 		$groups = [];
 		foreach ($results as $group) {
-			$groups[$group['id']] = $group['title'];
+			$groups[$group->id] = $group->title;
 		}
 
 		return $groups;
+	}
+
+	/**
+	 * Retrieves a base64 encoded url to be used as return after user authentication (&return=foo)
+	 *
+	 * @param string $url
+	 */
+	public static function generateReturnUrl($url)
+	{
+		return base64_encode(htmlspecialchars_decode($url));
 	}
 
 }

@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 /**
- * Mail helper
+ * Template Helper
  *
  * @package     Thomisticus.Library
  * @subpackage  Helper
@@ -18,25 +18,50 @@ defined('_JEXEC') or die;
  */
 abstract class ThomisticusHelperTemplate
 {
+
 	/**
-	 * Returns the data of a specific template, already making its parameters an JRegistry's instance
+	 * Retrieves template's alias by active menu
 	 *
-	 * @param $data ['id' => 123]
+	 * @return string|null  Template name on success, false on failure.
 	 *
-	 * @return mixed
+	 * @since version
 	 */
-	public static function getTemplateStyleData($data)
+	public static function getTemplateAliasByMenu()
 	{
-		if (empty($data)) {
-			return false;
+		$app  = JFactory::getApplication();
+		$menu = $app->getMenu();
+
+		if (!empty($menu)) {
+			if ($menuActive = $menu->getActive()) {
+				if ($idStyle = $menuActive->template_style_id) {
+					return ThomisticusHelperTemplate::getTemplateStyle($idStyle)->template;
+				}
+			}
 		}
 
-		$template = ThomisticusHelperModel::select('#__template_styles', '*', $data, 'Object');
+		return false;
+	}
 
-		if (!empty($template->params)) {
-			$template->params = new JRegistry($template->params);
+	/**
+	 * Method to get a single record of #__template_styles
+	 *
+	 * @param   integer $pk The id of the primary key.
+	 *
+	 * @return  mixed  Object on success, false on failure.
+	 */
+	public static function getTemplateStyle($pk = null)
+	{
+		$templateStyle = null;
+
+		if (!empty($pk)) {
+			$templateStyle = ThomisticusHelperModel::select('#__template_styles', ['id', 'template', 'client_id', 'home', 'title', 'params'], ['id' => $pk], 'Object');
+
+			if (!empty($templateStyle->params)) {
+				$templateStyle->params = new JRegistry($templateStyle->params);
+			}
+
 		}
 
-		return $template;
+		return $templateStyle;
 	}
 }
