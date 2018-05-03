@@ -31,6 +31,8 @@ abstract class ThomisticusHelperMail
 	 * @param string       $encoding    When sending HTML emails you should normally set the Encoding to base64
 	 *                                  in order to avoid unwanted characters in the output
 	 * @param string|array $attachments Email attachments (single string path or array of paths)
+     *
+     * @return bool
 	 */
 	public static function sendMail($subject, $body, $recipients = null, $mailFrom = '', $fromName = '', $isHtml = false, $encoding = '', $attachments = array())
 	{
@@ -61,7 +63,10 @@ abstract class ThomisticusHelperMail
 
 		if (!$mail->Send()) {
 			$app->enqueueMessage(JText::_('JERROR_SENDING_EMAIL'), 'warning');
+			return false;
 		}
+
+		return true;
 	}
 
 	/**
