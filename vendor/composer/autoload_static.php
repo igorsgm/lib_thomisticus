@@ -15,6 +15,10 @@ class ComposerStaticInit1d1d5b7b0566f280230a085af2585375
     );
 
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'Whoops\\' => 7,
+        ),
         'T' => 
         array (
             'Thomisticus\\' => 12,
@@ -25,6 +29,7 @@ class ComposerStaticInit1d1d5b7b0566f280230a085af2585375
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
         ),
@@ -49,6 +54,10 @@ class ComposerStaticInit1d1d5b7b0566f280230a085af2585375
     );
 
     public static $prefixDirsPsr4 = array (
+        'Whoops\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
+        ),
         'Thomisticus\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
@@ -56,6 +65,10 @@ class ComposerStaticInit1d1d5b7b0566f280230a085af2585375
         'Slim\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Psr\\Http\\Message\\' => 
         array (
