@@ -205,7 +205,6 @@ abstract class JHtmlThomisticus
 		}
 
 		ThomisticusHelperAsset::load('vendor/sweetalert2/sweetalert2.min.js', self::EXTENSION);
-		ThomisticusHelperAsset::load('vendor/sweetalert2/sweetalert2.min.css', self::EXTENSION);
 
 		static::$loaded[__METHOD__] = true;
 	}
