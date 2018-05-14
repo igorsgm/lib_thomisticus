@@ -225,4 +225,16 @@ abstract class JHtmlThomisticus
 
 		static::$loaded[__METHOD__] = true;
 	}
+
+	/**
+	 * Enable Whoops Debug
+	 *
+	 * @return void
+	 */
+	public static function debug()
+	{
+		$whoops = new \Whoops\Run;
+		$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+		$whoops->register();
+	}
 }
