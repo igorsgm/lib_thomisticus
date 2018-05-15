@@ -9,16 +9,11 @@ class ComposerStaticInit7d87863a3e7abe699434214190d16b3b
     public static $files = array (
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
-        'a9ed0d27b5a698798a89181429f162c5' => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib/Common/customFunctions.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'Z' => 
-        array (
-            'Zxing\\' => 6,
-        ),
         'W' => 
         array (
             'Whoops\\' => 7,
@@ -51,17 +46,9 @@ class ComposerStaticInit7d87863a3e7abe699434214190d16b3b
         array (
             'FastRoute\\' => 10,
         ),
-        'D' => 
-        array (
-            'Da\\QrCode\\' => 10,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Zxing\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/khanamiryan/qrcode-detector-decoder/lib',
-        ),
         'Whoops\\' => 
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
@@ -106,10 +93,6 @@ class ComposerStaticInit7d87863a3e7abe699434214190d16b3b
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
-        'Da\\QrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/2amigos/qrcode-library/src',
-        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -118,13 +101,6 @@ class ComposerStaticInit7d87863a3e7abe699434214190d16b3b
             'Pimple' => 
             array (
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
-            ),
-        ),
-        'B' => 
-        array (
-            'BaconQrCode' => 
-            array (
-                0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
             ),
         ),
     );
