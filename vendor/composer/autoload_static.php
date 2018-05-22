@@ -103,6 +103,13 @@ class ComposerStaticInit7d87863a3e7abe699434214190d16b3b
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
             ),
         ),
+        'O' => 
+        array (
+            'OpenBoleto\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/kriansa/openboleto/src',
+            ),
+        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
