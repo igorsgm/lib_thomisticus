@@ -86,7 +86,7 @@ abstract class ThomisticusHelperComponent
 	 *
 	 * @param $extensionName
 	 */
-	public static function getLanguage($extensionName, $client = '')
+	public static function loadLanguage($extensionName, $client = '')
 	{
 		if (empty($client)) {
 			$basePath = JFactory::getApplication()->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
