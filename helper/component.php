@@ -86,10 +86,16 @@ abstract class ThomisticusHelperComponent
 	 *
 	 * @param $extensionName
 	 */
-	public static function getLanguage($extensionName)
+	public static function getLanguage($extensionName, $client = '')
 	{
+		if (empty($client)) {
+			$basePath = JFactory::getApplication()->isClient('site') ? JPATH_SITE : JPATH_ADMINISTRATOR;
+		} else {
+			$basePath = $client == 'administrator' ? JPATH_ADMINISTRATOR : JPATH_SITE;
+		}
+
 		// Load library language
 		$lang = JFactory::getLanguage();
-		$lang->load($extensionName, JPATH_SITE, 'pt-BR', true);
+		$lang->load($extensionName, $basePath, 'pt-BR', true);
 	}
 }
