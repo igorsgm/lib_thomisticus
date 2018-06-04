@@ -80,4 +80,16 @@ abstract class ThomisticusHelperComponent
 
 		return $mainPath;
 	}
+
+	/**
+	 * Import language files from specific extension
+	 *
+	 * @param $extensionName
+	 */
+	public static function getLanguage($extensionName)
+	{
+		// Load library language
+		$lang = JFactory::getLanguage();
+		$lang->load($extensionName, JPATH_SITE, 'pt-BR', true);
+	}
 }
