@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c1290f1353949aed13ff3e35b8c2b7a",
+    "content-hash": "1622be12307537923a9f817d2aa6ed73",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -340,47 +340,6 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
-        },
-        {
-            "name": "kriansa/openboleto",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kriansa/openboleto.git",
-                "reference": "dec57d6bed20cb83418de63373e5351d7bb789ea"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kriansa/openboleto/zipball/dec57d6bed20cb83418de63373e5351d7bb789ea",
-                "reference": "dec57d6bed20cb83418de63373e5351d7bb789ea",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "OpenBoleto\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Daniel Garajau",
-                    "email": "kriansa@facebook.com"
-                }
-            ],
-            "description": "Biblioteca para geração de boletos bancários.",
-            "homepage": "http://github.com/kriansa/openboleto",
-            "keywords": [
-                "boleto",
-                "boleto bancario"
-            ],
-            "time": "2017-11-20T14:03:04+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -820,9 +779,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "kriansa/openboleto": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

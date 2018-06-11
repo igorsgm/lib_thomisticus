@@ -9,5 +9,4 @@ return array(
     'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src'),
     'Sabberworm\\CSS' => array($vendorDir . '/sabberworm/php-css-parser/lib'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
-    'OpenBoleto\\' => array($vendorDir . '/kriansa/openboleto/src'),
 );
