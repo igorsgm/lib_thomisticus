@@ -153,11 +153,12 @@ body{
 
 .barcode {
     height: 50px;
+    overflow: hidden;
 }
 
 .barcode div {
     display: inline-block;
-    height: 100%;
+    height: 50px;
 }
 
 .barcode .black {
