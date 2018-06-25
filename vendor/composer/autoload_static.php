@@ -143,20 +143,6 @@ class ComposerStaticInit7d87863a3e7abe699434214190d16b3b
         'HTML5_Parser' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Parser.php',
         'HTML5_Tokenizer' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/Tokenizer.php',
         'HTML5_TreeBuilder' => __DIR__ . '/..' . '/dompdf/dompdf/lib/html5lib/TreeBuilder.php',
-        'XMLSchema' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'nusoap_base' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'nusoap_client' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'nusoap_fault' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'nusoap_parser' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'nusoap_server' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'nusoap_xmlschema' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'soap_fault' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'soap_parser' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'soap_server' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'soap_transport_http' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'soapclient' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'soapval' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
-        'wsdl' => __DIR__ . '/..' . '/econea/nusoap/src/nusoap.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
