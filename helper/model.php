@@ -138,4 +138,36 @@ abstract class ThomisticusHelperModel
 
 		return $db->setQuery($query)->execute();
 	}
+
+	/**
+	 * Retrieves the list of tables in database
+	 * @return array
+	 */
+	public static function getTablesList()
+	{
+		$db = JFactory::getDbo();
+		$db->setQuery("SHOW TABLES");
+
+		$config = JFactory::getConfig();
+
+		return array_column($db->loadAssocList(), 'Tables_in_' . $config->get('db'));
+	}
+
+	/**
+	 * Checks if a specific table exisits in database or not
+	 *
+	 * @param string $tableNameWihtoutPrefix Table name without db prefix
+	 *
+	 * @return bool
+	 */
+	public static function tableExists($tableNameWihtoutPrefix)
+	{
+		$tables = self::getTablesList();
+		$config = JFactory::getConfig();
+
+		$tableName = $config->get('dbprefix') . $tableNameWihtoutPrefix;
+
+		return in_array($tableName, $tables);
+
+	}
 }
